@@ -2,18 +2,18 @@
 // Created by Wouter Groeneveld on 29/11/18.
 //
 
-#ifndef GBA_SPRITE_ENGINE_PROJECT_SPLASHSCREEN_H
+#ifndef GBA_SPRITE_ENGINE_PROJECT_STARTSCREEN_H
 #define GBA_SPRITE_ENGINE_PROJECT_SPLASHSCREEN_H
 
 
 #include <libgba-sprite-engine/scene.h>
 
-class SplashScreen : public Scene {
+class StartScreen : public Scene {
 private:
     std::unique_ptr<Background> bg;
 
 public:
-    SplashScreen(const std::shared_ptr<GBAEngine> &engine);
+    StartScreen(const std::shared_ptr<GBAEngine> &engine);
 
     std::vector<Sprite *> sprites() override;
 
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif //GBA_SPRITE_ENGINE_PROJECT_SPLASHSCREEN_H
+#endif //GBA_SPRITE_ENGINE_PROJECT_STARTSCREEN_H

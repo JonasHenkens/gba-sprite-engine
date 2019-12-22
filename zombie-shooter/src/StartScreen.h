@@ -1,5 +1,5 @@
 //
-// Created by henke on 28/11/2019.
+// Created by Wouter Groeneveld on 29/11/18.
 //
 
 #ifndef ZOMBIESHOOTER_STARTSCREEN_H
@@ -8,12 +8,12 @@
 
 #include <libgba-sprite-engine/scene.h>
 
-class StartScene : public Scene {
+class StartScreen : public Scene {
 private:
     std::unique_ptr<Background> bg;
 
 public:
-    StartScene(const std::shared_ptr<GBAEngine> &engine);
+    StartScreen(const std::shared_ptr<GBAEngine> &engine);
 
     std::vector<Sprite *> sprites() override;
 

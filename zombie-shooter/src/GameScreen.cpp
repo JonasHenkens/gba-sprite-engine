@@ -5,7 +5,7 @@
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <libgba-sprite-engine/background/text_stream.h>
 
-#include "arkanoid_game_scene.h"
+#include "GameScreen.h"
 #include "spritedata.h"
 #include "pats.h"
 #include "dead.h"

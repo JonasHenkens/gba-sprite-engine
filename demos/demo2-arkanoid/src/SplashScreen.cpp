@@ -11,25 +11,25 @@
 #include "splashimage.h"
 #include "omnom.h"
 
-SplashScreen::SplashScreen(const std::shared_ptr<GBAEngine> &engine) : Scene(engine) {}
+StartScreen::StartScreen(const std::shared_ptr<GBAEngine> &engine) : Scene(engine) {}
 
-std::vector<Sprite *> SplashScreen::sprites() {
+std::vector<Sprite *> StartScreen::sprites() {
     return {};
 }
 
-std::vector<Background *> SplashScreen::backgrounds() {
+std::vector<Background *> StartScreen::backgrounds() {
     return {
         bg.get()
     };
 }
 
-void SplashScreen::tick(u16 keys) {
+void StartScreen::tick(u16 keys) {
     if(keys & KEY_ANY) {
-        engine->setScene(new ArkanoidGameScene(engine));
+        engine->setScene(new GameScreen(engine));
     }
 }
 
-void SplashScreen::load() {
+void StartScreen::load() {
     // we need to disable the text background because the splash screen is too big and fills up al char blocks (including map)
     // remember, we have background char blocks 0, 1, 2, 3, each consisting of 8 screen blocks, from 0x6000000 to 0x6000f800 (last screen block, 31)
     engine.get()->disableText();
