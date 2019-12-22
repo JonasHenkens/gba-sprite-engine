@@ -3,10 +3,13 @@ project(zombieshooter)
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
         src/pats.h
-        src/GameScreen.cpp
-        src/GameScreen.h src/spritedata.h src/dead.h src/StartScreen.cpp src/StartScreen.h src/splashimage.h
+        src/GameScreen.cpp src/GameScreen.h
+        src/spritedata.h src/dead.h src/StartScreen.cpp src/StartScreen.h src/splashimage.h
         src/StartScreenImage.h
-        src/StartScreenImage2.h)
+        src/StartScreenImage2.h
+        src/Bullet.h
+        src/Weapon.cpp src/Weapon.h
+        src/Person.cpp src/Person.h src/Pistol.h)
 
 target_link_libraries(${PROJECT_NAME}.elf gba-sprite-engine)
 
