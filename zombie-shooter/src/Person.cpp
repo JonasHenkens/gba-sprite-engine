@@ -3,13 +3,14 @@
 //
 
 #include "Person.h"
+#include <libgba-sprite-engine/gba_engine.h>
 
 bool Person::getStillAlive() {
     return stillAlive;
 }
 
 void Person::die() {
-    //if hit by zombie => stillAlive = false;
+    //if hit by zombie => stillAlive = false; (how to include Zombie x and y coords???)
 }
 
 Weapon Person::getGun() {
@@ -31,5 +32,22 @@ void Person::shoot() {
     }
     else{
         // Weergave: "Weapon empty!!!"
+    }
+}
+
+int Person::getX() {
+    return xCoord;
+}
+
+int Person::getY() {
+    return yCoord;
+}
+
+void Person::move(u16 keys) {
+    if(keys & KEY_LEFT){
+        xCoord--;
+    }
+    else if(keys & KEY_RIGHT){
+        xCoord++;
     }
 }

@@ -6,10 +6,13 @@
 #define GIT_PERSON_H
 
 
+#include <libgba-sprite-engine/gba/tonc_types.h>
 #include "Weapon.h"
 
 class Person {
 private:
+    int xCoord;
+    int yCoord;
     bool stillAlive;
     Weapon gun;
 public:
@@ -19,6 +22,10 @@ public:
     void shoot();
     void reload();
     Weapon getGun();
+
+    int getX();
+    int getY();
+    void move(u16 keys);
 };
 
 
