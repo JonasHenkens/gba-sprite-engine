@@ -7,9 +7,10 @@
 
 #include "Weapon.h"
 
-class Pistol: Weapon { // pistool erft van wapen
+class Pistol: public Weapon { // pistool erft van wapen
 private:
     int magazine = 6; // max aantal kogels
+    int bullets;
     int damage = 10;
     // Afbeelding???
 };

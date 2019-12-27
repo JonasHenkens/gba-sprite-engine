@@ -7,16 +7,16 @@
 
 
 class Weapon {
-private:
+protected:
     int magazine; // max aantal kogels
     int bullets; // aantal kogels
     int damage;
 public:
-    int getDamage();
-    int getMagazine();
-    int getBullets();
-    void reload(int ammo);
-    void shoot();
+    virtual int getDamage();
+    virtual int getMagazine();
+    virtual int getBullets();
+    virtual void reload(int ammo);
+    virtual void shoot();
 };
 
 #endif //GIT_WEAPON_H

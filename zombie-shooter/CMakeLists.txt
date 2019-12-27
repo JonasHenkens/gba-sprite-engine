@@ -9,7 +9,8 @@ add_executable(${PROJECT_NAME}.elf
         src/StartScreenImage2.h
         src/Bullet.h
         src/Weapon.cpp src/Weapon.h
-        src/Person.cpp src/Person.h src/Pistol.h)
+        src/Person.cpp src/Person.h src/Pistol.h
+        src/Zombie.cpp src/Zombie.h)
 
 target_link_libraries(${PROJECT_NAME}.elf gba-sprite-engine)
 
