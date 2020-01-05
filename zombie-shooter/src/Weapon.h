@@ -11,10 +11,12 @@ protected:
     int magazine; // max aantal kogels
     int bullets; // aantal kogels
     int damage;
+    int chanceOfHeadshot; // Random headshot kills: makkelijker dan zelf mikken
 public:
     virtual int getDamage();
     virtual int getMagazine();
     virtual int getBullets();
+    virtual int getHeadshotChance();
     virtual void reload(int ammo);
     virtual void shoot();
 };

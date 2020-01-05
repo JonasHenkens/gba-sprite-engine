@@ -9,7 +9,6 @@
 class Zombie {
 private:
     bool headshot;
-    int lenght;
     int life;
 public:
     bool isDead();

@@ -14,7 +14,8 @@ bool Zombie::isDead() {
 }
 
 bool Zombie::isHeadshot() {
-    if(false){ // head = 25% of body (lenght)
+    // kijk naar wapen die shiet en doe random waarde
+    if(false){
         headshot = true;
     }
     else{
@@ -27,7 +28,7 @@ void Zombie::hit() {
     if(!isDead()){
         int weaponDamage = 0; // how to find damage of weapon??
         if(headshot){
-            life = life - weaponDamage*3;
+            life = life - weaponDamage*2;
         }
         else {
             life = life - weaponDamage;
@@ -37,8 +38,4 @@ void Zombie::hit() {
 
 int Zombie::getLife() {
     return life;
-}
-
-int Zombie::getLenght() {
-    return lenght;
 }

@@ -16,6 +16,10 @@ int Weapon::getBullets() {
     return bullets;
 }
 
+int Weapon::getHeadshotChance() {
+    return chanceOfHeadshot;
+}
+
 void Weapon::reload(int ammo) {
     bullets = bullets + ammo;
 }

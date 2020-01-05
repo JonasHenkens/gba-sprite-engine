@@ -12,6 +12,7 @@ private:
     int magazine = 6; // max aantal kogels
     int bullets;
     int damage = 10;
+    int chanceOfHeadshot = 0.25;
     // Afbeelding???
 };
 
