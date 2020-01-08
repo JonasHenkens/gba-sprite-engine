@@ -15,10 +15,15 @@ private:
     int ticks, highscore;
 
     std::unique_ptr<Sprite> paddle;
-    std::unique_ptr<Sprite> ball;
+    std::unique_ptr<Sprite> zombie;
 
     void youDied();
     void resetGame();
+    bool moveLeft = false;
+    bool moveRight = false;
+    bool moveUp = false;
+    bool moveDown = false;
+    int jumpTimer = 0;
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -28,6 +33,8 @@ public:
 
     void load() override;
     void tick(u16 keys) override;
+
+    bool canPlayerJump();
 
 };
 

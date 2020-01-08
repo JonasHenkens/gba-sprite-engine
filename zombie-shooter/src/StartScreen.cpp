@@ -9,7 +9,6 @@
 #include "GameScreen.h"
 
 #include "StartScreenImage2.h"
-#include "omnom.h"
 
 StartScreen::StartScreen(const std::shared_ptr<GBAEngine> &engine) : Scene(engine) {}
 
@@ -45,5 +44,4 @@ void StartScreen::load() {
     // the last char block (3) starts at screen block 24, is still available to dump the tilemap in.
     bg.get()->useMapScreenBlock(24);
 
-    engine.get()->enqueueSound(omnom, omnom_bytes, 44200);
 }
