@@ -17,6 +17,10 @@ Weapon Person::getGun() {
     return gun;
 }
 
+void Person::setGun(Weapon gun1) {
+    gun = gun1;
+}
+
 void Person::reload() {
     /* als er ... knop wordt gedrukt => kijk of speler genoeg ammo heeft om
         wapen volledig te vullen (meer/gelijk aan gun.getMagazine)
@@ -43,11 +47,8 @@ int Person::getY() {
     return yCoord;
 }
 
-void Person::move(u16 keys) {
-    if(keys & KEY_LEFT){
-        xCoord--;
-    }
-    else if(keys & KEY_RIGHT){
-        xCoord++;
+void Person::jump(u16 keys) {
+    if(keys & KEY_UP){
+        yCoord++;
     }
 }

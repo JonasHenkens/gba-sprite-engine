@@ -13,7 +13,6 @@ private:
 public:
     bool isDead();
     bool isHeadshot();
-    int getLenght();
     int getLife();
     void hit();
 };
