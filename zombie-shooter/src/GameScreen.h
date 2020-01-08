@@ -8,6 +8,7 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/scene.h>
 #include <vector>
+#include "Person.h"
 
 class GameScreen : public Scene {
 private:
@@ -15,7 +16,6 @@ private:
     int ticks, highscore;
 
     std::unique_ptr<Sprite> paddle;
-    std::unique_ptr<Sprite> zombie;
 
     void youDied();
     void resetGame();
@@ -24,6 +24,7 @@ private:
     bool moveUp = false;
     bool moveDown = false;
     int jumpTimer = 0;
+    Person person;
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -34,8 +35,7 @@ public:
     void load() override;
     void tick(u16 keys) override;
 
-    bool canPlayerJump();
-
+    bool canPersonJump();
 };
 
 

@@ -3,7 +3,9 @@
 //
 
 #include "Person.h"
+#include "spritedata.h"
 #include <libgba-sprite-engine/gba_engine.h>
+#include <libgba-sprite-engine/sprites/sprite_builder.h>
 
 bool Person::getStillAlive() {
     return stillAlive;
@@ -40,15 +42,47 @@ void Person::shoot() {
 }
 
 int Person::getX() {
-    return xCoord;
+    return sprite->getX();
 }
 
 int Person::getY() {
-    return yCoord;
+    return sprite->getY();
 }
 
-void Person::jump(u16 keys) {
-    if(keys & KEY_UP){
-        yCoord++;
+int Person::getWidth(){
+    return sprite->getWidth();
+}
+
+int Person::getHeight(){
+    return sprite->getHeight();
+}
+
+void Person::move (bool up, bool down, bool left, bool right) {
+
+    if (left == right) {
+        sprite->setVelocity(0, sprite->getDy());
     }
+    else if (right) {
+        sprite->setVelocity(+2, sprite->getDy());
+    }
+    else if (left) {
+        sprite->setVelocity(-2, sprite->getDy());
+    }
+    if (up == down) {
+        sprite->setVelocity(sprite->getDx(), 0);
+    }
+    else if (up) {
+        sprite->setVelocity(sprite->getDx(), -2);
+    }
+    else if (down) {
+        sprite->setVelocity(sprite->getDx(), +2);
+    }
+}
+
+void Person::setBuilder(SpriteBuilder<Sprite> builder) {
+    sprite = builder
+            .withSize(SIZE_16_32)
+            .withLocation(0, 128)
+            .withData(zombieheadTiles, sizeof(zombieheadTiles))
+            .buildPtr();
 }
