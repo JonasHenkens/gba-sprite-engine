@@ -22,10 +22,11 @@ public:
     void shoot();
     void reload();
     Weapon getGun();
+    void setGun(Weapon gun);
 
     int getX();
     int getY();
-    void move(u16 keys);
+    void jump(u16 keys);
 };
 
 
