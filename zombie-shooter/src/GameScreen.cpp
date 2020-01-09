@@ -6,16 +6,25 @@
 #include <libgba-sprite-engine/background/text_stream.h>
 
 #include "GameScreen.h"
-#include "spritedataOld.h"
 #include "pats.h"
 #include "dead.h"
 #include "spritedata.h"
 #include "Person.h"
+#include "DeathScreen.h"
 
 std::vector<Sprite *> GameScreen::sprites() {
-    return {
-            paddle.get(), person.sprite.get()
+    std::vector<Sprite *> sprites = {
+            //paddle.get()
     };
+    for (int i = 0; i < person.sprites().size(); ++i) {
+        sprites.push_back(person.sprites()[i]);
+    }
+    for (int j = 0; j < zombies.size(); ++j) {
+        for (int i = 0; i < zombies[j]->sprites().size(); ++i) {
+            sprites.push_back(zombies[j]->sprites()[i]);
+        }
+    }
+    return sprites;
 }
 
 std::vector<Background *> GameScreen::backgrounds() {
@@ -23,54 +32,28 @@ std::vector<Background *> GameScreen::backgrounds() {
 }
 
 void GameScreen::youDied() {
-    if(highscore < ticks) highscore = ticks;
-    engine.get()->enqueueSound(raw_dead, raw_dead_bytes, 32000);
-    //zombie->setVelocity(0, 0);
-    TextStream::instance() << "You DIED - start to reset";
-    dead = true;
+    if(highscore < score) highscore = score;
+    engine->setScene(new DeathScreen(engine, this, score, highscore));
 }
 
 void GameScreen::resetGame() {
-    dead = false;
-    ticks = 0;
-
+    score = 0;
+    zombies = {};
     TextStream::instance().clear();
-    //zombie->moveTo(110, 140);
-    //zombie->setVelocity(1, 1);
-    //paddle->moveTo(100, 150);
+
+    SpriteBuilder<Sprite> builder;
+    person.setBuilder(builder, 0, 128);
+    person.move(false, false, false, false);
+    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -2, 0)));
 }
 
 void GameScreen::tick(u16 keys) {
-    if(dead && (keys & KEY_START)) {
-        resetGame();
-        return;
-    }
 
-    if(dead) return;
-
-    TextStream::instance().setText(std::string("Ticks: ") + std::to_string(ticks), 5, 10);
     TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
+    TextStream::instance().setText(std::string("score: ") + std::to_string(score), 13, 10);
     TextStream::instance().setText(std::string("x: ") + std::to_string(person.getX()), 9, 10);
     TextStream::instance().setText(std::string("y: ") + std::to_string(person.getY()), 11, 10);
-/*
-    if(zombie->getX() <= 0 || zombie->getX() >= (GBA_SCREEN_WIDTH - zombie->getWidth())) {
-        zombie->setVelocity(-zombie->getDx(), zombie->getDy());
-    }else if(zombie->getY() <= 0) {
-        zombie->setVelocity(zombie->getDx(), -zombie->getDy());
-    } else if(zombie->getY() >= (GBA_SCREEN_HEIGHT - zombie->getHeight())) {
-       youDied();
-       return;
-    } else if(zombie->collidesWith(*paddle)) {
-        if(ticks > 1 && ticks % 5 == 0) {
-            zombie->setVelocity(zombie->getDx() + 1, zombie->getDy() + 1);
-        }
 
-        // lousy implementation; zombie could also hit paddle from right/left, meaning *BOOM*
-        zombie->setVelocity(zombie->getDx(), -zombie->getDy());
-        engine.get()->enqueueSound(pats, sizeof(pats), 32000);
-
-        ticks++;
-    }*/
     if(keys & KEY_LEFT) {
         moveLeft = true;
     }
@@ -108,27 +91,24 @@ void GameScreen::tick(u16 keys) {
     moveLeft = false;
     moveRight = false;
 
+    for (int i = 0; i < zombies.size(); ++i) {
+        if (person.sprite->collidesWith(*zombies[i]->sprite)){
+            youDied();
+
+        }
+        if (zombies[i]->getX() < 0 - zombies[i]->getWidth()){
+            zombies[i]->setSpeedMultiplier(0);
+        }
+    }
+    score++;
+
 }
 
 void GameScreen::load() {
     engine.get()->enableText();
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(spritedataSharedPal, sizeof(spritedataSharedPal)));
 
-    SpriteBuilder<Sprite> builder;
-/*
-    zombie = builder
-            .withSize(SIZE_16_32)
-            .withLocation(0, 128)
-            .withData(zombieheadTiles, sizeof(zombieheadTiles))
-            .buildPtr();
-*/
-    paddle = builder
-            .withSize(SIZE_16_32)
-            .withLocation(100, 150)
-            .withData(zombiehead2Tiles, sizeof(zombiehead2Tiles))
-            .withinBounds()
-            .buildPtr();
-    person.setBuilder(builder);
+    resetGame();
 
 }
 
@@ -137,3 +117,4 @@ bool GameScreen::canPersonJump() {
         return true;
     } else return false;
 }
+

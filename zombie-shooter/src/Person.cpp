@@ -7,6 +7,12 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 
+std::vector<Sprite *> Person::sprites() {
+    return {
+            sprite.get()
+    };
+}
+
 bool Person::getStillAlive() {
     return stillAlive;
 }
@@ -79,10 +85,10 @@ void Person::move (bool up, bool down, bool left, bool right) {
     }
 }
 
-void Person::setBuilder(SpriteBuilder<Sprite> builder) {
+void Person::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
     sprite = builder
             .withSize(SIZE_16_32)
-            .withLocation(0, 128)
-            .withData(zombieheadTiles, sizeof(zombieheadTiles))
+            .withLocation(x, y)
+            .withData(personTiles, sizeof(personTiles))
             .buildPtr();
 }

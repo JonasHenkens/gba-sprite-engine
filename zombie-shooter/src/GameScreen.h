@@ -9,11 +9,13 @@
 #include <libgba-sprite-engine/scene.h>
 #include <vector>
 #include "Person.h"
+#include "Zombie.h"
 
 class GameScreen : public Scene {
 private:
     bool dead;
-    int ticks, highscore;
+    int score;
+    int highscore;
 
     std::unique_ptr<Sprite> paddle;
 
@@ -25,17 +27,20 @@ private:
     bool moveDown = false;
     int jumpTimer = 0;
     Person person;
+    std::vector<std::shared_ptr<Zombie>> zombies;
 
 public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
 
-    GameScreen(std::shared_ptr<GBAEngine> engine) : Scene(engine), ticks(0), highscore(0) {}
+    GameScreen(std::shared_ptr<GBAEngine> engine) : Scene(engine), highscore(0) {}
+    GameScreen(std::shared_ptr<GBAEngine> engine, int highscore) : Scene(engine), highscore(highscore) {}
 
     void load() override;
     void tick(u16 keys) override;
 
     bool canPersonJump();
+
 };
 
 

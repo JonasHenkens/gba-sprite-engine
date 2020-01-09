@@ -10,6 +10,7 @@
 #include "Weapon.h"
 #include <libgba-sprite-engine/sprites/sprite.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
+#include <vector>
 
 class Person {
 private:
@@ -17,7 +18,7 @@ private:
     Weapon gun;
 public:
     std::unique_ptr<Sprite> sprite;
-    void setBuilder(SpriteBuilder<Sprite> builder);
+    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
     bool getStillAlive();
 
     // in scene: ga over alle zombies en kijk of die colliden met person
@@ -36,6 +37,7 @@ public:
     int getHeight();
     void move (bool up, bool down, bool left, bool right);
 
+    std::vector<Sprite *> sprites();
 };
 
 
