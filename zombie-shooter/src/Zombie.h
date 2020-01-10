@@ -6,7 +6,7 @@
 #define GIT_ZOMBIE_H
 
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
-#include "../../../../Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/vector"
+#include "vector"
 
 class Zombie {
 private:
