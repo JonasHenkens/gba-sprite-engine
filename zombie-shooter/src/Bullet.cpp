@@ -12,21 +12,20 @@ Bullet::Bullet(SpriteBuilder<Sprite> builder, int x, int y, int dx) {
     setVelocity(dx);
 }
 
-std::vector<Sprite *> Zombie::sprites() {
+std::vector<Sprite *> Bullet::sprites() {
     return {
             sprite.get()
     };
 }
 
-// Moet aangepast worden naar kogelSprite
 void Bullet::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
     sprite = builder
-            .withSize(SIZE_16_32)
+            .withSize(SIZE_8_8)
             .withLocation(x, y)
-            .withData(zombieTiles, sizeof(zombieTiles))
+            .withData(bulletTiles, sizeof(bulletTiles))
             .buildPtr();
 }
 
-void Bullet::setVelocity(int dx, int dy) {
-    sprite->setVelocity(dx, dy);
+void Bullet::setVelocity(int dx) {
+    sprite->setVelocity(dx, 0);
 }

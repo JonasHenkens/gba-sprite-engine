@@ -13,7 +13,6 @@ private:
     int bullets;
     int damage = 10;
     int chanceOfHeadshot = 0.20;
-    // Afbeelding???
 };
 
 #endif //GIT_PISTOL_H

@@ -10,6 +10,7 @@
 #include <vector>
 #include "Person.h"
 #include "Zombie.h"
+#include "Bullet.h"
 
 class GameScreen : public Scene {
 private:
@@ -28,6 +29,7 @@ private:
     int jumpTimer = 0;
     Person person;
     std::vector<std::shared_ptr<Zombie>> zombies;
+    std::vector<std::shared_ptr<Bullet>> bullets;
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -40,7 +42,7 @@ public:
     void tick(u16 keys) override;
 
     bool canPersonJump();
-
+    void checkBounds();
 };
 
 

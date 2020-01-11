@@ -11,15 +11,16 @@
 #include <vector>
 
 class Bullet {
+private:
+    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
 public:
     std::unique_ptr<Sprite> sprite;
-    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
     std::vector<Sprite *> sprites();
 
     Bullet(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
-    Bullet(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy);
+    Bullet(SpriteBuilder<Sprite> builder, int x, int y, int dx);
 
-    void setVelocity(int dx, int dy);
+    void setVelocity(int dx);
 };
 
 
