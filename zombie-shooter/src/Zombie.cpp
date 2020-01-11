@@ -7,9 +7,10 @@
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include "spritedata.h"
 
-Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy) {
+Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints) {
     setBuilder(builder, x, y);
     setVelocity(dx, dy);
+    life = lifePoints;
 }
 
 std::vector<Sprite *> Zombie::sprites() {
@@ -27,7 +28,7 @@ void Zombie::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
 }
 
 void Zombie::setVelocity(int dx, int dy) {
-    sprite->setVelocity(dx*speedMultiplier, dy*speedMultiplier);
+    sprite->setVelocity(dx, dy);
 }
 
 int Zombie::getX() {
@@ -72,25 +73,13 @@ bool Zombie::isDead() {
     }
 }
 
-bool Zombie::isHeadshot() {
-    // kijk naar wapen die shiet en doe random waarde
-    if(false){
-        headshot = true;
-    }
-    else{
-        headshot = false;
-    }
-    return headshot;
-}
-
-void Zombie::hit() {
+void Zombie::hit(int damage, bool isHeadshot) {
     if(!isDead()){
-        int weaponDamage = 0; // how to find damage of weapon??
-        if(headshot){
-            life = life - weaponDamage*2;
+        if(isHeadshot){
+            life = life - damage*2;
         }
         else {
-            life = life - weaponDamage;
+            life = life - damage;
         }
     }
 }

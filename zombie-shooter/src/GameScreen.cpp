@@ -44,7 +44,7 @@ void GameScreen::resetGame() {
     SpriteBuilder<Sprite> builder;
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
-    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -2, 0)));
+    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -2, 0, 3)));
 }
 
 void GameScreen::tick(u16 keys) {
@@ -52,7 +52,7 @@ void GameScreen::tick(u16 keys) {
     TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
     TextStream::instance().setText(std::string("score: ") + std::to_string(score), 13, 10);
     TextStream::instance().setText(std::string("x: ") + std::to_string(person.getX()), 9, 10);
-    TextStream::instance().setText(std::string("y: ") + std::to_string(person.getY()), 11, 10);
+    TextStream::instance().setText(std::string("life Zombie: ") + std::to_string(zombies[0].get()->getLife()), 11, 10);
 
     if(keys & KEY_LEFT) {
         moveLeft = true;
@@ -109,7 +109,6 @@ void GameScreen::load() {
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(spritedataSharedPal, sizeof(spritedataSharedPal)));
 
     resetGame();
-
 }
 
 bool GameScreen::canPersonJump() {

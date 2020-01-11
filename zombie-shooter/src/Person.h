@@ -14,17 +14,11 @@
 
 class Person {
 private:
-    bool stillAlive;
     Weapon gun;
 public:
     std::unique_ptr<Sprite> sprite;
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
-    bool getStillAlive();
-
-    // in scene: ga over alle zombies en kijk of die colliden met person
-    void die(); /* maak speler dood als zombie hem raakt
-                   of te zetten in getStillAlive als controle */
-
+    std::vector<Sprite *> sprites();
 
     void shoot();
     void reload();
@@ -36,8 +30,6 @@ public:
     int getWidth();
     int getHeight();
     void move (bool up, bool down, bool left, bool right);
-
-    std::vector<Sprite *> sprites();
 };
 
 

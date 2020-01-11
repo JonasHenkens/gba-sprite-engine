@@ -13,14 +13,6 @@ std::vector<Sprite *> Person::sprites() {
     };
 }
 
-bool Person::getStillAlive() {
-    return stillAlive;
-}
-
-void Person::die() {
-    //if hit by zombie => stillAlive = false; (how to include Zombie x and y coords???)
-}
-
 Weapon Person::getGun() {
     return gun;
 }
@@ -30,6 +22,7 @@ void Person::setGun(Weapon gun1) {
 }
 
 void Person::reload() {
+
     /* als er ... knop wordt gedrukt => kijk of speler genoeg ammo heeft om
         wapen volledig te vullen (meer/gelijk aan gun.getMagazine)
      * Zo ja => gun.reload(gun.getMagazine()-gun.getBullets());
