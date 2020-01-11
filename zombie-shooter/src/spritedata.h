@@ -7,7 +7,7 @@
 //	+ 8 tiles not compressed
 //	Total size: 512 = 512
 //
-//	Time-stamp: 2020-01-09, 14:53:37
+//	Time-stamp: 2020-01-11, 21:30:09
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.6
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -40,12 +40,12 @@ const unsigned int personTiles[128] __attribute__((aligned(4)))=
 
 //======================================================================
 //
-//	zombie, 16x32@8, 
+//	zombie, 16x32@8,
 //	Transparent color : FF,8C,C5
 //	+ 8 tiles not compressed
 //	Total size: 512 = 512
 //
-//	Time-stamp: 2020-01-09, 14:53:37
+//	Time-stamp: 2020-01-11, 21:30:09
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.6
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -74,24 +74,69 @@ const unsigned int zombieTiles[128] __attribute__((aligned(4)))=
 
 //}}BLOCK(zombie)
 
-//{{BLOCK(spritedataShared)
+//{{BLOCK(bullet)
 
 //======================================================================
 //
-//	spritedataShared, 16x16@8, 
+//	bullet, 8x8@8,
 //	Transparent color : FF,8C,C5
-//	+ palette 6 entries, not compressed
-//	Total size: 12 = 12
+//	+ 1 tiles not compressed
+//	Total size: 64 = 64
 //
-//	Time-stamp: 2020-01-09, 14:53:37
+//	Time-stamp: 2020-01-11, 21:30:09
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.6
 //	( http://www.coranac.com/projects/#grit )
 //
 //======================================================================
 
-const unsigned short spritedataSharedPal[6] __attribute__((aligned(4)))=
+const unsigned int bulletTiles[16] __attribute__((aligned(4)))=
         {
-                0x623F,0x7E40,0x01BF,0x7C16,0x0000,0x1984,
+                0x04060606,0x04040404,0x04060606,0x04040404,0x04060606,0x04040404,0x04040404,0x04040404,
+                0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,
         };
 
-//}}BLOCK(spritedataShared)
+//}}BLOCK(bullet)
+
+//{{BLOCK(pistol)
+
+//======================================================================
+//
+//	pistol, 8x8@8,
+//	Transparent color : FF,8C,C5
+//	+ 1 tiles not compressed
+//	Total size: 64 = 64
+//
+//	Time-stamp: 2020-01-11, 21:30:09
+//	Exported by Cearn's GBA Image Transmogrifier, v0.8.6
+//	( http://www.coranac.com/projects/#grit )
+//
+//======================================================================
+
+const unsigned int pistolTiles[16] __attribute__((aligned(4)))=
+        {
+                0x00000004,0x00000000,0x04040400,0x04040404,0x07070404,0x04070707,0x04080400,0x04040404,
+                0x04080804,0x00000400,0x00040804,0x00000004,0x00040400,0x00000000,0x04040404,0x04040404,
+        };
+
+//}}BLOCK(pistol)
+
+//{{BLOCK(spritedataShared)
+
+//======================================================================
+//
+//	spritedataShared, 16x16@8,
+//	Transparent color : FF,8C,C5
+//	+ palette 9 entries, not compressed
+//	Total size: 18 = 18
+//
+//	Time-stamp: 2020-01-11, 21:30:09
+//	Exported by Cearn's GBA Image Transmogrifier, v0.8.6
+//	( http://www.coranac.com/projects/#grit )
+//
+//======================================================================
+
+const unsigned short spritedataSharedPal[10] __attribute__((aligned(4)))=
+        {
+                0x623F,0x7E40,0x01BF,0x7C16,0x0000,0x1984,0x001F,0x4210,
+                0x00CF,
+        };
