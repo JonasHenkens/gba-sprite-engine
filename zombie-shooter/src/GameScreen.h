@@ -18,13 +18,13 @@ class GameScreen : public Scene {
 private:
     std::unique_ptr<Background> bg;
     bool dead;
-    bool noAmmo;
+    bool ammoDone;
+    bool weaponEmpty;
     int score;
+    int points;
     int highscore;
     int ammountBullet;
 
-    void youDied();
-    void resetGame();
     bool moveLeft = false;
     bool moveRight = false;
     bool moveUp = false;
@@ -32,15 +32,22 @@ private:
     int jumpTimer = 0;
     int shootTimer = 1000;
 
+    int countZombies = 0;
+    int maxLife = 2;
+
+    bool shopAvialable = false;
+
+    void youDied();
+    void resetGame();
+
     Person person;
     Pistol pistol;
     std::vector<std::shared_ptr<Zombie>> zombies;
     std::vector<std::unique_ptr<Sprite>> bulletSprites;
     SpriteBuilder<Sprite> builder;
     std::unique_ptr<Sprite> bullet;
-    int counter;
-    int counter2;
-    int counter3;
+    // int counter;
+    // int counter2;
 
     std::vector<int> bulletsToRemove;
     std::vector<int> zombiesToRemove;
@@ -60,12 +67,14 @@ public:
     bool canPersonJump();
     void checkBounds();
     void move();
-    void textOnScreen();
     void checkCollisions();
     void shoot();
 
-    void removeExcessSprites();
+    void textOnScreen();
+    void shopOnScreen(u16 keys);
+    void quitShop();
 
+    void removeExcessSprites();
     void spawnZombie();
 };
 

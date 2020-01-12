@@ -50,55 +50,66 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
+    points = 0;
+    countZombies = 0;
     ammountBullet = 30;
-    noAmmo = false;
+    ammoDone = true;
+    weaponEmpty = false;
+    shopAvialable = false;
     zombies = {};
     TextStream::instance().clear();
 
+    bulletSprites.clear();
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
     pistol = Pistol(builder,person.getWidth(),138, 0);
     person.setGun(&pistol);
-    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, 3)));
-    bulletSprites.clear();
 }
 
 void GameScreen::tick(u16 keys) {
-    textOnScreen();
-    if (zombies.size() < 2) {
-        spawnZombie();
+    if(shopAvialable){
+        shopOnScreen(keys);
     }
+    else{
+        textOnScreen();
 
-    if(keys & KEY_LEFT) {
-        moveLeft = true;
-    }
-    if(keys & KEY_RIGHT) {
-        moveRight = true;
-    }
-    if(keys & KEY_A && canPersonJump()){
-        noAmmo = person.reload(&ammountBullet);
-    }
-    else if(keys & KEY_UP && canPersonJump()) {
-        jumpTimer = 16;
-    }
-    if(keys & KEY_B) {
-        shoot();
-    }
+        if (zombies.size() < 2) {
+            spawnZombie();
+        }
 
-    if (jumpTimer > 0) {
-        moveUp = true;
-        jumpTimer--;
-    } else {
-        moveDown = true;
+        if(keys & KEY_LEFT) {
+            moveLeft = true;
+        }
+        if(keys & KEY_RIGHT) {
+            moveRight = true;
+        }
+        if(keys & KEY_A && canPersonJump()){
+            ammoDone = person.reload(&ammountBullet);
+        }
+        else if(keys & KEY_UP && canPersonJump()) {
+            jumpTimer = 16;
+        }
+        if(keys & KEY_B) {
+            shoot();
+        }
+
+        if (jumpTimer > 0) {
+            moveUp = true;
+            jumpTimer--;
+        }
+        else {
+            moveDown = true;
+        }
+
+        shootTimer++;
+
+        checkBounds();
+        move();
+        checkCollisions();
+        removeExcessSprites();
+
+        engine->updateSpritesInScene();
     }
-    shootTimer++;
-
-    checkBounds();
-    move();
-    checkCollisions();
-    removeExcessSprites();
-
-    engine->updateSpritesInScene();
 }
 
 void GameScreen::load() {
@@ -111,7 +122,8 @@ void GameScreen::load() {
 bool GameScreen::canPersonJump() {
     if (person.getY() == 128) {
         return true;
-    } else return false;
+    }
+    else return false;
 }
 
 void GameScreen::checkBounds() {
@@ -139,15 +151,74 @@ void GameScreen::move() {
 }
 
 void GameScreen::textOnScreen() {
-    TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
-    TextStream::instance().setText(std::string("zombies: ") + std::to_string(zombies.size()), 15, 10);
-    TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 13, 10);
-    TextStream::instance().setText(std::string("Ammo: ") + std::to_string(ammountBullet), 9, 10);
-    TextStream::instance().setText(std::string("Bullets gun: ") + std::to_string(person.getGun()->getBullets()), 11, 10);
-    if(noAmmo){
-        TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 5, 10);
+    if(!ammoDone){
+        TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 1, 5);
     }
-    TextStream::instance().setText(std::string("Magazine: ") + std::to_string(person.getGun()->getMagazine()), 3, 10);
+    else{
+        TextStream::instance().setText("", 1, 5);
+    }
+
+    if(weaponEmpty){
+        TextStream::instance().setText(std::string("RELOAD!!!"), 3, 5);
+    }
+    else{
+        TextStream::instance().setText("", 3, 5);
+    }
+
+    TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 5, 5);
+    TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 7, 5);
+    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 9, 5);
+    TextStream::instance().setText(std::string("Life z: ") + std::to_string(zombies[0].get()->getLife()), 11, 5);
+    TextStream::instance().setText(std::string("Bullets/Ammo: ") + std::to_string(person.getGun()->getBullets())
+    + "/" + std::to_string(ammountBullet), 13, 5);
+}
+
+void GameScreen::shopOnScreen(u16 keys) {
+    TextStream::instance().setText(std::string("Click A for AMMO (+30/+50/+20)  [-5p]"), 3, 1);
+    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-15p]"), 7, 1);
+    TextStream::instance().setText(std::string("Click START to return"), 11, 1);
+    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 13, 1);
+    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 15, 1);
+
+    if(keys & KEY_A) {
+        if(points >= 5){
+            ammountBullet = ammountBullet + 30;
+            points = points - 5;
+        }
+        quitShop();
+    }
+    if(keys & KEY_B) {
+        // not available yet
+        if(points >= 15){
+            int chanceWeapon = rand() % 10 + 1;
+            if(chanceWeapon < 5){
+                // pistol (40%) && ammo = 30
+            }
+            else if(chanceWeapon < 9){
+                // ak (40%) && ammo = 50
+            }
+            else{
+                // sniper (20%) && ammo = 20
+            }
+            points = points - 15;
+        }
+        quitShop();
+    }
+    if(keys & KEY_START) {
+        quitShop();
+    }
+}
+
+void GameScreen::quitShop() {
+    shopAvialable = false;
+    TextStream::instance().clear();
+
+    for (int i = 0; i < zombies.size(); ++i) {
+        zombies[i]->setVelocity(-1, 0);
+    }
+    for (int i = 0; i < bulletSprites.size(); ++i) {
+        bulletSprites[i]->setVelocity(2, 0);
+    }
 }
 
 void GameScreen::checkCollisions() {
@@ -172,6 +243,7 @@ void GameScreen::checkCollisions() {
                 zombiesToRemove.push_back(i);
                 bulletsToRemove.push_back(j);
                 score++;
+                points++;
                 break;
             }
         }
@@ -180,14 +252,16 @@ void GameScreen::checkCollisions() {
 }
 
 void GameScreen::shoot() {
-
     if (shootTimer < 30) {
         return;
-    } else {
+    }
+    else {
         shootTimer = 0;
     }
 
-    if (person.shoot()) {
+    weaponEmpty = !person.shoot();
+
+    if (!weaponEmpty) {
         bulletSprites.push_back(builder
                                         .withSize(SIZE_8_8)
                                         .withLocation(person.getGun()->getX(), person.getGun()->getY())
@@ -196,7 +270,6 @@ void GameScreen::shoot() {
                                         .buildPtr());
         engine->updateSpritesInScene();
     }
-
 }
 
 void GameScreen::removeExcessSprites() {
@@ -229,7 +302,23 @@ void GameScreen::removeExcessSprites() {
 }
 
 void GameScreen::spawnZombie() {
-    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, 3)));
+    if(countZombies < 11){
+        int life = rand() % maxLife + 1;
+        countZombies++;
+        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, life)));
+    }
+    else{
+        countZombies = 0;
+        maxLife++;
+        shopAvialable = true;
+        TextStream::instance().clear();
 
+        for (int i = 0; i < zombies.size(); ++i) {
+            zombies[i]->setVelocity(0, 0);
+        }
+        for (int i = 0; i < bulletSprites.size(); ++i) {
+            bulletSprites[i]->setVelocity(0, 0);
+        }
+    }
 }
 
