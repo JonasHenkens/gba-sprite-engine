@@ -242,6 +242,9 @@ void GameScreen::openShop() {
     for (int i = 0; i < bulletSprites.size(); ++i) {
         bulletSprites[i]->setVelocity(0, 0);
     }
+
+    person.sprite->setVelocity(0, 0);
+    pistol.sprite->setVelocity(0, 0);
 }
 
 void GameScreen::checkCollisions() {
