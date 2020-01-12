@@ -47,13 +47,11 @@ private:
     void resetGame();
 
     Person person;
-    Pistol pistol;
+    std::shared_ptr<Weapon> weapon;
     std::vector<std::shared_ptr<Zombie>> zombies;
     std::vector<std::unique_ptr<Sprite>> bulletSprites;
     SpriteBuilder<Sprite> builder;
     std::unique_ptr<Sprite> bullet;
-    // int counter;
-    // int counter2;
 
     std::vector<int> bulletsToRemove;
     std::vector<int> zombiesToRemove;

@@ -13,11 +13,11 @@ std::vector<Sprite *> Person::sprites() {
     };
 }
 
-Weapon* Person::getGun() {
+std::shared_ptr<Weapon> Person::getGun() {
     return gun;
 }
 
-void Person::setGun(Weapon* gun1) {
+void Person::setGun(std::shared_ptr<Weapon> gun1) {
     gun = gun1;
 }
 

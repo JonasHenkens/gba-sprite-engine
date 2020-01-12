@@ -16,8 +16,8 @@
 std::vector<Sprite *> GameScreen::sprites() {
     std::vector<Sprite *> sprites = {};
 
-    for (int h = 0; h < pistol.sprites().size(); ++h) {
-        sprites.push_back(pistol.sprites()[h]);
+    for (int h = 0; h < weapon->sprites().size(); ++h) {
+        sprites.push_back(weapon->sprites()[h]);
     }
 
     for (int i = 0; i < person.sprites().size(); ++i) {
@@ -64,8 +64,9 @@ void GameScreen::resetGame() {
     bulletSprites.clear();
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
-    pistol = Pistol(builder,person.getWidth(),138, 0);
-    person.setGun(&pistol);
+    weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getWidth(),138, 0));
+    person.setGun(weapon);
+
 }
 
 void GameScreen::tick(u16 keys) {
@@ -155,7 +156,7 @@ void GameScreen::checkBounds() {
 
 void GameScreen::move() {
     person.move(moveUp, moveDown, moveLeft, moveRight);
-    pistol.move(moveUp, moveDown, moveLeft, moveRight);
+    weapon->move(moveUp, moveDown, moveLeft, moveRight);
     moveUp = false;
     moveDown = false;
     moveLeft = false;
@@ -203,22 +204,23 @@ void GameScreen::shopOnScreen(u16 keys) {
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
                 ammountBullet = 25;
-                pistol = Pistol(builder,person.getX() + person.getWidth(),138, 0);
-                person.setGun(&pistol);
+                weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getX() + person.getWidth(),138, 0));
+                person.setGun(weapon);
                 shootFast = false;
             }
             else if(chanceWeapon < 9){
                 ammountBullet = 70;
-                AK47 gun = AK47(builder,person.getX() + person.getWidth(),138, 35);
-                person.setGun(&gun);
+                weapon = std::shared_ptr<Weapon>( new AK47(builder,person.getX() + person.getWidth(),138, 35));
+                person.setGun(weapon);
                 shootFast = true;
             }
             else{
                 ammountBullet = 15;
-                Sniper gun = Sniper(builder,person.getX() + person.getWidth(),138, 1);
-                person.setGun(&gun);
+                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX() + person.getWidth(),138, 1));
+                person.setGun(weapon);
                 shootFast = false;
             }
+            engine->updateSpritesInScene();
             points = points - 20;
         }
     }
@@ -251,7 +253,7 @@ void GameScreen::openShop() {
     }
 
     person.sprite->setVelocity(0, 0);
-    pistol.sprite->setVelocity(0, 0);
+    weapon->sprite->setVelocity(0, 0);
 }
 
 void GameScreen::checkCollisions() {
