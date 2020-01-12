@@ -199,7 +199,6 @@ void GameScreen::shopOnScreen(u16 keys) {
         }
     }
     if(keys & KEY_B && !clicked_B) {
-        // not available yet
         if(points >= 20){
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
@@ -220,7 +219,7 @@ void GameScreen::shopOnScreen(u16 keys) {
                 person.setGun(&gun);
                 shootFast = false;
             }
-            points = points - 15;
+            points = points - 20;
         }
     }
     if(keys & KEY_START && !clicked_START) {
