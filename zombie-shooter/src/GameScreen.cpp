@@ -56,11 +56,7 @@ void GameScreen::resetGame() {
 }
 
 void GameScreen::tick(u16 keys) {
-
-    TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
-    TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 13, 10);
-    TextStream::instance().setText(std::string("X: ") + std::to_string(person.getX()), 9, 10);
-    TextStream::instance().setText(std::string("Life Zombie: ") + std::to_string(zombies[0].get()->getLife()), 11, 10);
+    textOnScreen();
 
     if(keys & KEY_LEFT) {
         moveLeft = true;
@@ -84,23 +80,10 @@ void GameScreen::tick(u16 keys) {
     }
 
     checkBounds();
+    movePerson();
+    checkDead();
 
-    person.move(moveUp, moveDown, moveLeft, moveRight);
-    moveUp = false;
-    moveDown = false;
-    moveLeft = false;
-    moveRight = false;
-
-    for (int i = 0; i < zombies.size(); ++i) {
-        if (person.sprite->collidesWith(*zombies[i]->sprite)){
-            youDied();
-        }
-        if (zombies[i]->getX() < 0 - zombies[i]->getWidth()){
-            zombies[i]->setSpeedMultiplier(0);
-        }
-    }
     score++;
-
 }
 
 void GameScreen::load() {
@@ -131,3 +114,28 @@ void GameScreen::checkBounds() {
     }
 }
 
+void GameScreen::movePerson() {
+    person.move(moveUp, moveDown, moveLeft, moveRight);
+    moveUp = false;
+    moveDown = false;
+    moveLeft = false;
+    moveRight = false;
+}
+
+void GameScreen::textOnScreen() {
+    TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
+    TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 13, 10);
+    TextStream::instance().setText(std::string("X: ") + std::to_string(person.getX()), 9, 10);
+    TextStream::instance().setText(std::string("Life Zombie: ") + std::to_string(zombies[0].get()->getLife()), 11, 10);
+}
+
+void GameScreen::checkDead() {
+    for (int i = 0; i < zombies.size(); ++i) {
+        if (person.sprite->collidesWith(*zombies[i]->sprite)){
+            youDied();
+        }
+        if (zombies[i]->getX() < 0 - zombies[i]->getWidth()){
+            zombies[i]->setSpeedMultiplier(0);
+        }
+    }
+}

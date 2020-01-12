@@ -43,6 +43,9 @@ public:
 
     bool canPersonJump();
     void checkBounds();
+    void movePerson();
+    void textOnScreen();
+    void checkDead();
 };
 
 
