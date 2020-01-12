@@ -56,6 +56,8 @@ void GameScreen::resetGame() {
     ammoDone = true;
     weaponEmpty = false;
     shopAvialable = false;
+    clicked_A = false;
+    clicked_B = false;
     zombies = {};
     TextStream::instance().clear();
 
@@ -69,6 +71,8 @@ void GameScreen::resetGame() {
 void GameScreen::tick(u16 keys) {
     if(shopAvialable){
         shopOnScreen(keys);
+        clicked_A = keys & KEY_A;
+        clicked_B = keys & KEY_B;
     }
     else{
         textOnScreen();
@@ -91,6 +95,9 @@ void GameScreen::tick(u16 keys) {
         }
         if(keys & KEY_B) {
             shoot();
+        }
+        if(keys & KEY_START) {
+            openShop();
         }
 
         if (jumpTimer > 0) {
@@ -180,14 +187,13 @@ void GameScreen::shopOnScreen(u16 keys) {
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 13, 1);
     TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 15, 1);
 
-    if(keys & KEY_A) {
+    if(keys & KEY_A && !clicked_A) {
         if(points >= 5){
             ammountBullet = ammountBullet + 30;
             points = points - 5;
         }
-        quitShop();
     }
-    if(keys & KEY_B) {
+    if(keys & KEY_B && !clicked_B) {
         // not available yet
         if(points >= 15){
             int chanceWeapon = rand() % 10 + 1;
@@ -202,7 +208,6 @@ void GameScreen::shopOnScreen(u16 keys) {
             }
             points = points - 15;
         }
-        quitShop();
     }
     if(keys & KEY_START) {
         quitShop();
@@ -218,6 +223,18 @@ void GameScreen::quitShop() {
     }
     for (int i = 0; i < bulletSprites.size(); ++i) {
         bulletSprites[i]->setVelocity(2, 0);
+    }
+}
+
+void GameScreen::openShop() {
+    shopAvialable = true;
+    TextStream::instance().clear();
+
+    for (int i = 0; i < zombies.size(); ++i) {
+        zombies[i]->setVelocity(0, 0);
+    }
+    for (int i = 0; i < bulletSprites.size(); ++i) {
+        bulletSprites[i]->setVelocity(0, 0);
     }
 }
 
@@ -310,15 +327,6 @@ void GameScreen::spawnZombie() {
     else{
         countZombies = 0;
         maxLife++;
-        shopAvialable = true;
-        TextStream::instance().clear();
-
-        for (int i = 0; i < zombies.size(); ++i) {
-            zombies[i]->setVelocity(0, 0);
-        }
-        for (int i = 0; i < bulletSprites.size(); ++i) {
-            bulletSprites[i]->setVelocity(0, 0);
-        }
     }
 }
 

@@ -20,6 +20,8 @@ private:
     bool dead;
     bool ammoDone;
     bool weaponEmpty;
+    bool clicked_A;
+    bool clicked_B;
     int score;
     int points;
     int highscore;
@@ -73,6 +75,7 @@ public:
     void textOnScreen();
     void shopOnScreen(u16 keys);
     void quitShop();
+    void openShop();
 
     void removeExcessSprites();
     void spawnZombie();
