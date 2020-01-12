@@ -18,25 +18,36 @@ Weapon Person::getGun() {
 }
 
 void Person::setGun(Weapon gun1) {
-    gun = gun1;
+    *gun = gun1;
 }
 
-void Person::reload() {
-
-    /* als er ... knop wordt gedrukt => kijk of speler genoeg ammo heeft om
-        wapen volledig te vullen (meer/gelijk aan gun.getMagazine)
-     * Zo ja => gun.reload(gun.getMagazine()-gun.getBullets());
-     * Zo nee => Steek alle resterende kogels in gun
-     * Indien volledig geen kogels => weergave "No Ammo!!!"
-     */
-}
-
-void Person::shoot() {
-    if(gun.getBullets() > 0){
-        gun.shoot();
+bool Person::reload(int* ammo) {
+    if(gun.getMagazine() - gun.getBullets() <= 0){
+        return true;
+    }
+    else if(*ammo > gun.getMagazine() - gun.getBullets()){
+        int enoughBullets = gun.getMagazine() - gun.getBullets();
+        gun.reload(enoughBullets);
+        *ammo =  *ammo - enoughBullets;
+        return true;
+    }
+    else if(*ammo <= 0){
+        return false;
     }
     else{
-        // Weergave: "Weapon empty!!!"
+        gun.reload(*ammo);
+        *ammo =  0;
+        return true;
+    }
+}
+
+bool Person::shoot() {
+    if(gun.getBullets() > 0){
+        gun.shoot();
+        return true;
+    }
+    else{
+       return false;
     }
 }
 

@@ -20,8 +20,8 @@ public:
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
     std::vector<Sprite *> sprites();
 
-    void shoot();
-    void reload();
+    bool shoot();
+    bool reload(int* ammo);
     Weapon getGun();
     void setGun(Weapon gun);
 

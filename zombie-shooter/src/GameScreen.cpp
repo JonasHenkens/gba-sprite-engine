@@ -17,9 +17,15 @@ std::vector<Sprite *> GameScreen::sprites() {
     std::vector<Sprite *> sprites = {
             //paddle.get()
     };
+
+    for (int h = 0; h < pistol.sprites().size(); ++h) {
+        sprites.push_back(pistol.sprites()[h]);
+    }
+
     for (int i = 0; i < person.sprites().size(); ++i) {
         sprites.push_back(person.sprites()[i]);
     }
+
     for (int j = 0; j < zombies.size(); ++j) {
         for (int i = 0; i < zombies[j]->sprites().size(); ++i) {
             sprites.push_back(zombies[j]->sprites()[i]);
@@ -45,13 +51,16 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
+    ammountBullet = 30;
+    noAmmo = false;
     zombies = {};
     bullets = {};
     TextStream::instance().clear();
 
-    SpriteBuilder<Sprite> builder;
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
+    pistol = Pistol(builder,person.getWidth(),138, 0);
+    person.setGun(pistol);
     zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, 3)));
 }
 
@@ -64,12 +73,11 @@ void GameScreen::tick(u16 keys) {
     if(keys & KEY_RIGHT) {
         moveRight = true;
     }
-    if(keys & KEY_UP && canPersonJump()) {
-        jumpTimer = 16;
+    if(keys & KEY_A && canPersonJump()){
+        noAmmo = person.reload(&ammountBullet);
     }
-    else if(keys & KEY_START && canPersonJump()){
-        SpriteBuilder<Sprite> builder;
-        bullets.push_back(std::shared_ptr<Bullet>(new Bullet(builder, person.getX()+person.getWidth()/2, 110,  2)));
+    else if(keys & KEY_UP && canPersonJump()) {
+        jumpTimer = 16;
     }
 
     if (jumpTimer > 0) {
@@ -80,7 +88,7 @@ void GameScreen::tick(u16 keys) {
     }
 
     checkBounds();
-    movePerson();
+    move();
     checkDead();
 
     score++;
@@ -114,8 +122,9 @@ void GameScreen::checkBounds() {
     }
 }
 
-void GameScreen::movePerson() {
+void GameScreen::move() {
     person.move(moveUp, moveDown, moveLeft, moveRight);
+    pistol.move(moveUp, moveDown, moveLeft, moveRight);
     moveUp = false;
     moveDown = false;
     moveLeft = false;
@@ -125,8 +134,12 @@ void GameScreen::movePerson() {
 void GameScreen::textOnScreen() {
     TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 7, 10);
     TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 13, 10);
-    TextStream::instance().setText(std::string("X: ") + std::to_string(person.getX()), 9, 10);
-    TextStream::instance().setText(std::string("Life Zombie: ") + std::to_string(zombies[0].get()->getLife()), 11, 10);
+    TextStream::instance().setText(std::string("Ammo: ") + std::to_string(ammountBullet), 9, 10);
+    TextStream::instance().setText(std::string("Bullets gun: ") + std::to_string(person.getGun().getBullets()), 11, 10);
+    if(noAmmo){
+        TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 5, 10);
+    }
+    TextStream::instance().setText(std::string("Magazine: ") + std::to_string(person.getGun().getMagazine()), 3, 10);
 }
 
 void GameScreen::checkDead() {

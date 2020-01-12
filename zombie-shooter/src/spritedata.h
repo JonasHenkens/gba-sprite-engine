@@ -74,11 +74,11 @@ const unsigned int zombieTiles[128] __attribute__((aligned(4)))=
 
 //}}BLOCK(zombie)
 
-//{{BLOCK(bullet)
+//{{BLOCK(ammountBullet)
 
 //======================================================================
 //
-//	bullet, 8x8@8,
+//	ammountBullet, 8x8@8,
 //	Transparent color : FF,8C,C5
 //	+ 1 tiles not compressed
 //	Total size: 64 = 64
@@ -95,7 +95,7 @@ const unsigned int bulletTiles[16] __attribute__((aligned(4)))=
                 0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,0x04040404,
         };
 
-//}}BLOCK(bullet)
+//}}BLOCK(ammountBullet)
 
 //{{BLOCK(pistol)
 

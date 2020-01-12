@@ -5,20 +5,19 @@
 #ifndef GIT_WEAPON_H
 #define GIT_WEAPON_H
 
-
 class Weapon {
 protected:
-    int magazine; // max aantal kogels
-    int bullets; // aantal kogels
-    int damage;
-    int chanceOfHeadshot; // Random headshot kills: makkelijker dan zelf mikken
+    int magazine; // max amount of bullets
+    int bullets; // aantal kogels in weapon
+    int damage; // Damage of weapon
+    int chanceOfHeadshot; // Random headshot kills
 public:
-    virtual int getDamage();
-    virtual int getMagazine();
-    virtual int getBullets();
-    virtual int getHeadshotChance();
-    virtual void reload(int ammo);
-    virtual void shoot();
+    virtual int getDamage() = 0;
+    virtual int getMagazine() = 0;
+    virtual int getBullets() = 0;
+    virtual int getHeadshotChance() = 0;
+    void reload(int ammo);
+    void shoot();
 };
 
 #endif //GIT_WEAPON_H

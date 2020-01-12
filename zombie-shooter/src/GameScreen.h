@@ -11,14 +11,16 @@
 #include "Person.h"
 #include "Zombie.h"
 #include "Bullet.h"
+#include "Weapon.h"
+#include "Pistol.h"
 
 class GameScreen : public Scene {
 private:
     bool dead;
+    bool noAmmo;
     int score;
     int highscore;
-
-    std::unique_ptr<Sprite> paddle;
+    int ammountBullet;
 
     void youDied();
     void resetGame();
@@ -27,9 +29,12 @@ private:
     bool moveUp = false;
     bool moveDown = false;
     int jumpTimer = 0;
+
     Person person;
+    Pistol pistol;
     std::vector<std::shared_ptr<Zombie>> zombies;
     std::vector<std::shared_ptr<Bullet>> bullets;
+    SpriteBuilder<Sprite> builder;
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -43,7 +48,7 @@ public:
 
     bool canPersonJump();
     void checkBounds();
-    void movePerson();
+    void move();
     void textOnScreen();
     void checkDead();
 };
