@@ -14,9 +14,7 @@
 #include "Bullet.h"
 
 std::vector<Sprite *> GameScreen::sprites() {
-    std::vector<Sprite *> sprites = {
-            //paddle.get()
-    };
+    std::vector<Sprite *> sprites = {};
 
     for (int h = 0; h < pistol.sprites().size(); ++h) {
         sprites.push_back(pistol.sprites()[h]);
@@ -66,6 +64,7 @@ void GameScreen::resetGame() {
     person.move(false, false, false, false);
     pistol = Pistol(builder,person.getWidth(),138, 0);
     person.setGun(&pistol);
+    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, 40)));
 }
 
 void GameScreen::tick(u16 keys) {
@@ -261,10 +260,25 @@ void GameScreen::checkCollisions() {
             }
 
             if (zombies[i]->sprite->collidesWith(*bulletSprites[j])){
-                zombiesToRemove.push_back(i);
+                bool headshot = false;
+                int damageGun = person.getGun()->getDamage();
+                int chanceHeadshot = person.getGun()->getHeadshotChance();
+                int chance = rand() % 10 + 1;
+
+                if(chance <= chanceHeadshot){
+                    headshot = true;
+                }
+
+                if(damageGun > zombies[i].get()->getLife()){
+                    zombiesToRemove.push_back(i);
+                    score++;
+                    points++;
+                }
+                else{
+                    zombies[i].get()->hit(damageGun, headshot);
+                }
+
                 bulletsToRemove.push_back(j);
-                score++;
-                points++;
                 break;
             }
         }
