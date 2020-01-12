@@ -23,6 +23,7 @@ private:
     bool weaponEmpty;
     bool clicked_A;
     bool clicked_B;
+    bool clicked_START;
     int score;
     int points;
     int highscore;

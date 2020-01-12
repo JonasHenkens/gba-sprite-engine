@@ -56,6 +56,7 @@ void GameScreen::resetGame() {
     shopAvialable = false;
     clicked_A = false;
     clicked_B = false;
+    clicked_START = false;
     zombies = {};
     TextStream::instance().clear();
 
@@ -72,6 +73,7 @@ void GameScreen::tick(u16 keys) {
         shopOnScreen(keys);
         clicked_A = keys & KEY_A;
         clicked_B = keys & KEY_B;
+        clicked_START = keys & KEY_START;
     }
     else{
         textOnScreen();
@@ -95,7 +97,7 @@ void GameScreen::tick(u16 keys) {
         if(keys & KEY_B) {
             shoot();
         }
-        if(keys & KEY_START) {
+        if(keys & KEY_START && !clicked_START) {
             openShop();
         }
 
@@ -212,7 +214,7 @@ void GameScreen::shopOnScreen(u16 keys) {
             points = points - 15;
         }
     }
-    if(keys & KEY_START) {
+    if(keys & KEY_START && !clicked_START) {
         quitShop();
     }
 }
@@ -269,7 +271,7 @@ void GameScreen::checkCollisions() {
                     headshot = true;
                 }
 
-                if(damageGun > zombies[i].get()->getLife()){
+                if(damageGun >= zombies[i].get()->getLife()){
                     zombiesToRemove.push_back(i);
                     score++;
                     points++;
@@ -337,7 +339,7 @@ void GameScreen::removeExcessSprites() {
 }
 
 void GameScreen::spawnZombie() {
-    if(countZombies < 11){
+    if(countZombies < 6){
         int life = rand() % maxLife + 1;
         countZombies++;
         zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, life)));
