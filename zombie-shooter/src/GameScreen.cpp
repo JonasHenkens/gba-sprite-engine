@@ -74,51 +74,54 @@ void GameScreen::tick(u16 keys) {
         clicked_A = keys & KEY_A;
         clicked_B = keys & KEY_B;
         clicked_START = keys & KEY_START;
+        return;
     }
-    else{
-        textOnScreen();
 
-        if (zombies.size() < 2) {
-            spawnZombie();
-        }
+    textOnScreen();
 
-        if(keys & KEY_LEFT) {
-            moveLeft = true;
-        }
-        if(keys & KEY_RIGHT) {
-            moveRight = true;
-        }
-        if(keys & KEY_A && canPersonJump()){
-            ammoDone = person.reload(&ammountBullet);
-        }
-        else if(keys & KEY_UP && canPersonJump()) {
-            jumpTimer = 16;
-        }
-        if(keys & KEY_B) {
-            shoot();
-        }
-        if(keys & KEY_START && !clicked_START) {
-            openShop();
-        }
+    if (zombies.size() < 2) {
+        spawnZombie();
+    }
+
+    if(keys & KEY_LEFT) {
+        moveLeft = true;
+    }
+    if(keys & KEY_RIGHT) {
+        moveRight = true;
+    }
+    if(keys & KEY_A && canPersonJump()){
+        ammoDone = person.reload(&ammountBullet);
+    }
+    else if(keys & KEY_UP && canPersonJump()) {
+        jumpTimer = 16;
+    }
+    if(keys & KEY_B) {
+        shoot();
+    }
+    if(keys & KEY_START && !clicked_START) {
+        openShop();
         clicked_START = keys & KEY_START;
-
-        if (jumpTimer > 0) {
-            moveUp = true;
-            jumpTimer--;
-        }
-        else {
-            moveDown = true;
-        }
-
-        shootTimer++;
-
-        checkBounds();
-        move();
-        checkCollisions();
-        removeExcessSprites();
-
-        engine->updateSpritesInScene();
+        return;
     }
+    clicked_START = keys & KEY_START;
+
+    if (jumpTimer > 0) {
+        moveUp = true;
+        jumpTimer--;
+    }
+    else {
+        moveDown = true;
+    }
+
+    shootTimer++;
+
+    checkBounds();
+    move();
+    checkCollisions();
+    removeExcessSprites();
+
+    engine->updateSpritesInScene();
+
 }
 
 void GameScreen::load() {
