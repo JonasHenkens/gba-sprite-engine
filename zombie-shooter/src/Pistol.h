@@ -13,11 +13,6 @@
 
 class Pistol: public Weapon {
 private:
-    int magazine = 6;
-    int bullets;
-    int damage = 10;
-    int chanceOfHeadshot = 0.20;
-
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
 public:
     std::unique_ptr<Sprite> sprite;
@@ -25,7 +20,7 @@ public:
 
     //Pistol(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
     Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin);
-    Pistol()= default;;
+    Pistol()= default;
 
     int getX();
     int getY();

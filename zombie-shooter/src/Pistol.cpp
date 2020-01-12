@@ -7,6 +7,14 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 
+Pistol::Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
+    setBuilder(builder, x, y);
+    magazine = 6;
+    bullets = bulletsBegin;
+    damage = 10;
+    chanceOfHeadshot = 0.20;
+}
+
 std::vector<Sprite *> Pistol::sprites() {
     return {
             sprite.get()
@@ -60,8 +68,5 @@ void Pistol::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
 }
 
 
-Pistol::Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
-    setBuilder(builder, x, y);
-    bullets = bulletsBegin;
-}
+
 
