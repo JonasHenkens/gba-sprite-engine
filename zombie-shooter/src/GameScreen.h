@@ -13,6 +13,7 @@
 #include "Bullet.h"
 #include "Weapon.h"
 #include "Pistol.h"
+#include "Sniper.h"
 
 class GameScreen : public Scene {
 private:

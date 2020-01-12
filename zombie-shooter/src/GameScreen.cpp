@@ -198,13 +198,17 @@ void GameScreen::shopOnScreen(u16 keys) {
         if(points >= 15){
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
-                // pistol (40%) && ammo = 30
+                pistol = Pistol(builder,person.getX() + person.getWidth(),138, 0);
+                person.setGun(&pistol);
+                ammountBullet = 30;
             }
             else if(chanceWeapon < 9){
                 // ak (40%) && ammo = 50
             }
             else{
-                // sniper (20%) && ammo = 20
+                Sniper gun = Sniper(builder,person.getX() + person.getWidth(),138, 1);
+                person.setGun(&gun);
+                ammountBullet = 20;
             }
             points = points - 15;
         }
