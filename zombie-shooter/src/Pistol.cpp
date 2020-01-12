@@ -65,18 +65,3 @@ Pistol::Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
     bullets = bulletsBegin;
 }
 
-int Pistol::getMagazine() {
-    return magazine;
-}
-
-int Pistol::getBullets() {
-    return bullets;
-}
-
-int Pistol::getHeadshotChance() {
-    return chanceOfHeadshot;
-}
-
-int Pistol::getDamage() {
-    return damage;
-}

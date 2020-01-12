@@ -33,10 +33,6 @@ public:
     int getHeight();
     void move (bool up, bool down, bool left, bool right);
 
-    int getDamage();
-    int getMagazine();
-    int getBullets();
-    int getHeadshotChance();
 };
 
 #endif //GIT_PISTOL_H

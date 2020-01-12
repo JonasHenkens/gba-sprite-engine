@@ -11,11 +11,13 @@
 #include <libgba-sprite-engine/sprites/sprite.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <vector>
+#include "Pistol.h"
 
 class Person {
 private:
     Weapon gun;
 public:
+
     std::unique_ptr<Sprite> sprite;
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
     std::vector<Sprite *> sprites();

@@ -18,7 +18,7 @@ Weapon Person::getGun() {
 }
 
 void Person::setGun(Weapon gun1) {
-    *gun = gun1;
+    gun = gun1;
 }
 
 bool Person::reload(int* ammo) {
