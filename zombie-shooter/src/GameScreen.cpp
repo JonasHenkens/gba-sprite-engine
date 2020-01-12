@@ -100,6 +100,7 @@ void GameScreen::tick(u16 keys) {
         if(keys & KEY_START && !clicked_START) {
             openShop();
         }
+        clicked_START = keys & KEY_START;
 
         if (jumpTimer > 0) {
             moveUp = true;
