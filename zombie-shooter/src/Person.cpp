@@ -13,21 +13,21 @@ std::vector<Sprite *> Person::sprites() {
     };
 }
 
-Weapon Person::getGun() {
+Weapon* Person::getGun() {
     return gun;
 }
 
-void Person::setGun(Weapon gun1) {
+void Person::setGun(Weapon* gun1) {
     gun = gun1;
 }
 
 bool Person::reload(int* ammo) {
-    if(gun.getMagazine() - gun.getBullets() <= 0){
+    if(gun->getMagazine() - gun->getBullets() <= 0){
         return true;
     }
-    else if(*ammo > gun.getMagazine() - gun.getBullets()){
-        int enoughBullets = gun.getMagazine() - gun.getBullets();
-        gun.reload(enoughBullets);
+    else if(*ammo > gun->getMagazine() - gun->getBullets()){
+        int enoughBullets = gun->getMagazine() - gun->getBullets();
+        gun->reload(enoughBullets);
         *ammo =  *ammo - enoughBullets;
         return true;
     }
@@ -35,15 +35,15 @@ bool Person::reload(int* ammo) {
         return false;
     }
     else{
-        gun.reload(*ammo);
+        gun->reload(*ammo);
         *ammo =  0;
         return true;
     }
 }
 
 bool Person::shoot() {
-    if(gun.getBullets() > 0){
-        gun.shoot();
+    if(gun->getBullets() > 0){
+        gun->shoot();
         return true;
     }
     else{

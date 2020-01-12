@@ -27,3 +27,52 @@ int Weapon::getHeadshotChance() {
 int Weapon::getDamage() {
     return damage;
 }
+
+void Weapon::move (bool up, bool down, bool left, bool right) {
+
+    if (left == right) {
+        sprite->setVelocity(0, sprite->getDy());
+    }
+    else if (right) {
+        sprite->setVelocity(+2, sprite->getDy());
+    }
+    else if (left) {
+        sprite->setVelocity(-2, sprite->getDy());
+    }
+    if (up == down) {
+        sprite->setVelocity(sprite->getDx(), 0);
+    }
+    else if (up) {
+        sprite->setVelocity(sprite->getDx(), -2);
+    }
+    else if (down) {
+        sprite->setVelocity(sprite->getDx(), +2);
+    }
+}
+
+int Weapon::getX() {
+    return sprite->getX();
+}
+
+int Weapon::getY() {
+    return sprite->getY();
+}
+
+int Weapon::getWidth(){
+    return sprite->getWidth();
+}
+
+int Weapon::getHeight(){
+    return sprite->getHeight();
+}
+
+std::vector<Sprite *> Weapon::sprites() {
+    std::vector<Sprite *> sprites = {
+            sprite.get()
+    };
+
+    for (int i = 0; i < activeBullets.size(); ++i) {
+        sprites.push_back(activeBullets[i]->sprites()[0]);
+    }
+    return sprites;
+}

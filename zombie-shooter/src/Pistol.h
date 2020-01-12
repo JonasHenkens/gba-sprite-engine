@@ -15,18 +15,13 @@ class Pistol: public Weapon {
 private:
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
 public:
-    std::unique_ptr<Sprite> sprite;
-    std::vector<Sprite *> sprites();
 
     //Pistol(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
     Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin);
     Pistol()= default;
+    void shoot() override;
 
-    int getX();
-    int getY();
-    int getWidth();
-    int getHeight();
-    void move (bool up, bool down, bool left, bool right);
+
 
 };
 

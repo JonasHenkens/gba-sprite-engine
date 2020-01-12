@@ -14,10 +14,9 @@ private:
     std::unique_ptr<Background> bg;
     int score;
     int highscore;
-    GameScreen *gameScreen;
 
 public:
-    DeathScreen(const std::shared_ptr<GBAEngine> &engine, GameScreen *gameScreen, int score, int highscore);
+    DeathScreen(const std::shared_ptr<GBAEngine> &engine, int score, int highscore);
 
     std::vector<Sprite *> sprites() override;
 

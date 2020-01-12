@@ -11,7 +11,7 @@
 
 #include "DeathScreenImage.h"
 
-DeathScreen::DeathScreen(const std::shared_ptr<GBAEngine> &engine, GameScreen *gameScreen, int score, int highscore) : Scene(engine), gameScreen(gameScreen), score(score), highscore(highscore) {}
+DeathScreen::DeathScreen(const std::shared_ptr<GBAEngine> &engine, int score, int highscore) : Scene(engine), score(score), highscore(highscore) {}
 
 std::vector<Sprite *> DeathScreen::sprites() {
     return {};

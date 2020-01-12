@@ -14,6 +14,7 @@ private:
     int speedMultiplier = 1;
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
 public:
+    bool deleted = false;
     std::unique_ptr<Sprite> sprite;
     Zombie(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
     Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int life);
@@ -33,6 +34,7 @@ public:
     int getDx();
     int getDy();
     int getSpeedMultiplier();
+    void setCoords(int x, int y);
 
     void setSpeedMultiplier(int speedMultiplier);
 };

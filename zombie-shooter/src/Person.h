@@ -15,7 +15,7 @@
 
 class Person {
 private:
-    Weapon gun;
+    Weapon* gun;
 public:
 
     std::unique_ptr<Sprite> sprite;
@@ -24,8 +24,8 @@ public:
 
     bool shoot();
     bool reload(int* ammo);
-    Weapon getGun();
-    void setGun(Weapon gun);
+    Weapon* getGun();
+    void setGun(Weapon* gun);
 
     int getX();
     int getY();

@@ -87,3 +87,8 @@ void Zombie::hit(int damage, bool isHeadshot) {
 int Zombie::getLife() {
     return life;
 }
+
+void Zombie::setCoords(int x, int y) {
+    sprite->moveTo(x, y);
+
+}
