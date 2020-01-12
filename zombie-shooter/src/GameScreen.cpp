@@ -12,6 +12,7 @@
 #include "Person.h"
 #include "DeathScreen.h"
 #include "Bullet.h"
+#include "gameBackgroundImage.h"
 
 std::vector<Sprite *> GameScreen::sprites() {
     std::vector<Sprite *> sprites = {};
@@ -38,7 +39,9 @@ std::vector<Sprite *> GameScreen::sprites() {
 }
 
 std::vector<Background *> GameScreen::backgrounds() {
-    return {};
+    return {
+        bg.get()
+    };
 }
 
 void GameScreen::youDied() {
@@ -128,6 +131,10 @@ void GameScreen::tick(u16 keys) {
 void GameScreen::load() {
     engine.get()->enableText();
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(spritedataSharedPal, sizeof(spritedataSharedPal)));
+
+    backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(gameBackgroundPal, sizeof(gameBackgroundPal)));
+    bg = std::unique_ptr<Background>(new Background(1, gameBackgroundTiles, sizeof(gameBackgroundTiles), gameBackgroundMap, sizeof(gameBackgroundMap)));
+    bg.get()->useMapScreenBlock(16);
 
     resetGame();
 }

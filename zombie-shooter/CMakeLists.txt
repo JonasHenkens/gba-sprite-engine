@@ -15,7 +15,7 @@ add_executable(${PROJECT_NAME}.elf
         src/Zombie.cpp src/Zombie.h
         src/Bullet.cpp src/Bullet.h
         src/Sniper.cpp src/Sniper.h
-        src/AK47.cpp src/AK47.h)
+        src/AK47.cpp src/AK47.h src/gameBackgroundImage.h)
 
 target_link_libraries(${PROJECT_NAME}.elf gba-sprite-engine)
 

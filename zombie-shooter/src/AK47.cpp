@@ -17,7 +17,7 @@ AK47::AK47(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
 
 void AK47::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
     sprite = builder
-            .withSize(SIZE_16_8)
+            .withSize(SIZE_64_32)
             .withLocation(x, y)
             .withData(akTiles, sizeof(akTiles))
             .buildPtr();

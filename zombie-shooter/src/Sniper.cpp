@@ -17,7 +17,7 @@ Sniper::Sniper(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
 
 void Sniper::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
     sprite = builder
-            .withSize(SIZE_16_8)
+            .withSize(SIZE_64_32)
             .withLocation(x, y)
             .withData(sniperTiles, sizeof(sniperTiles))
             .buildPtr();
