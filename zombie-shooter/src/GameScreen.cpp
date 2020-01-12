@@ -48,11 +48,12 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
-    points = 0;
+    points = 100;
     countZombies = 0;
     ammountBullet = 30;
     ammoDone = true;
     weaponEmpty = false;
+    shootFast = false;
     shopAvialable = false;
     clicked_A = false;
     clicked_B = false;
@@ -65,7 +66,6 @@ void GameScreen::resetGame() {
     person.move(false, false, false, false);
     pistol = Pistol(builder,person.getWidth(),138, 0);
     person.setGun(&pistol);
-    zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, 40)));
 }
 
 void GameScreen::tick(u16 keys) {
@@ -186,34 +186,39 @@ void GameScreen::textOnScreen() {
 }
 
 void GameScreen::shopOnScreen(u16 keys) {
-    TextStream::instance().setText(std::string("Click A for AMMO (+30/+50/+20)  [-5p]"), 3, 1);
-    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-15p]"), 7, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO (+20/+40/+10)  [-6p]"), 3, 1);
+    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 7, 1);
     TextStream::instance().setText(std::string("Click START to return"), 11, 1);
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 13, 1);
     TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 15, 1);
 
     if(keys & KEY_A && !clicked_A) {
-        if(points >= 5){
+        if(points >= 6){
             ammountBullet = ammountBullet + 30;
-            points = points - 5;
+            points = points - 6;
         }
     }
     if(keys & KEY_B && !clicked_B) {
         // not available yet
-        if(points >= 15){
+        if(points >= 20){
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
+                ammountBullet = 25;
                 pistol = Pistol(builder,person.getX() + person.getWidth(),138, 0);
                 person.setGun(&pistol);
-                ammountBullet = 30;
+                shootFast = false;
             }
             else if(chanceWeapon < 9){
-                // ak (40%) && ammo = 50
+                ammountBullet = 70;
+                AK47 gun = AK47(builder,person.getX() + person.getWidth(),138, 35);
+                person.setGun(&gun);
+                shootFast = true;
             }
             else{
+                ammountBullet = 15;
                 Sniper gun = Sniper(builder,person.getX() + person.getWidth(),138, 1);
                 person.setGun(&gun);
-                ammountBullet = 20;
+                shootFast = false;
             }
             points = points - 15;
         }
@@ -296,7 +301,10 @@ void GameScreen::checkCollisions() {
 }
 
 void GameScreen::shoot() {
-    if (shootTimer < 30) {
+    if (shootTimer < 30 && !shootFast) {
+        return;
+    }
+    else if(shootTimer < 5 && shootFast) {
         return;
     }
     else {

@@ -14,6 +14,7 @@
 #include "Weapon.h"
 #include "Pistol.h"
 #include "Sniper.h"
+#include "AK47.h"
 
 class GameScreen : public Scene {
 private:
@@ -21,6 +22,7 @@ private:
     bool dead;
     bool ammoDone;
     bool weaponEmpty;
+    bool shootFast;
     bool clicked_A;
     bool clicked_B;
     bool clicked_START;
