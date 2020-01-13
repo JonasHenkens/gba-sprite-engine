@@ -43,7 +43,7 @@ private:
     int shootTimer = 1000;
     int countZombies = 0;
     int maxZombies = 2;
-    int zombieSpeedUp = 0;
+    int zombieSpeedUp;
     int maxLife = 2;
 
     bool shopAvialable = false;

@@ -52,11 +52,13 @@ void GameScreen::youDied() {
 void GameScreen::resetGame() {
     score = 0;
     points = 1000;
+    zombieSpeedUp = 0;
     countZombies = 0;
     ammountBullet = 30;
     maxZombies = 2;
     zspeed = 1;
     zombies = {};
+    bulletSprites.clear();
     TextStream::instance().clear();
 
     ammoDone = true;
@@ -67,12 +69,10 @@ void GameScreen::resetGame() {
     clicked_B = false;
     clicked_START = false;
 
-    bulletSprites.clear();
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
     weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getWidth(),138, 0));
     person.setGun(weapon);
-
 }
 
 void GameScreen::tick(u16 keys) {
@@ -121,7 +121,6 @@ void GameScreen::tick(u16 keys) {
     }
 
     shootTimer++;
-
     checkBounds();
     move();
     checkCollisions();
@@ -322,10 +321,10 @@ void GameScreen::checkCollisions() {
 }
 
 void GameScreen::shoot() {
-    if (shootTimer < 30 && !shootFast) {
+    if (shootTimer < 25 && !shootFast) {
         return;
     }
-    else if(shootTimer < 10 && shootFast) {
+    else if(shootTimer < 7 && shootFast) {
         return;
     }
     else {
@@ -380,11 +379,14 @@ void GameScreen::spawnZombie() {
     if(countZombies < 6){
         int life = rand() % maxLife + 1;
         countZombies++;
-        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1 * zspeed, 0, life)));
+        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*zspeed, 0, life)));
     }
-    else if(zombieSpeedUp > 12){
+    if(zombieSpeedUp > 3){
         maxZombies++;
-        zspeed++;
+        if(zspeed > 3){}
+        else{
+            zspeed++;
+        }
         zombieSpeedUp = 0;
     }
     else{
