@@ -12,7 +12,7 @@ AK47::AK47(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
     magazine = 30;
     bullets = bulletsBegin;
     damage = 2;
-    chanceOfHeadshot = 5; // op 10
+    chanceOfHeadshot = 4; // op 10
 }
 
 void AK47::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {

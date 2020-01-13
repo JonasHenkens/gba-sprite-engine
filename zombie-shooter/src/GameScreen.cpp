@@ -51,9 +51,13 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
-    points = 100;
+    points = 1000;
     countZombies = 0;
     ammountBullet = 30;
+    maxZombies = 2;
+    zombies = {};
+    TextStream::instance().clear();
+
     ammoDone = true;
     weaponEmpty = false;
     shootFast = false;
@@ -61,8 +65,6 @@ void GameScreen::resetGame() {
     clicked_A = false;
     clicked_B = false;
     clicked_START = false;
-    zombies = {};
-    TextStream::instance().clear();
 
     bulletSprites.clear();
     person.setBuilder(builder, 0, 128);
@@ -83,7 +85,7 @@ void GameScreen::tick(u16 keys) {
 
     textOnScreen();
 
-    if (zombies.size() < 2) {
+    if (zombies.size() < maxZombies && !zombieCollisions()) {
         spawnZombie();
     }
 
@@ -125,7 +127,6 @@ void GameScreen::tick(u16 keys) {
     removeExcessSprites();
 
     engine->updateSpritesInScene();
-
 }
 
 void GameScreen::load() {
@@ -144,6 +145,18 @@ bool GameScreen::canPersonJump() {
         return true;
     }
     else return false;
+}
+
+bool GameScreen::zombieCollisions() {
+    for (int i = 0; i < zombies.size(); ++i) {
+        int xZombie = zombies[i].get()->getX();
+        int space = zombies[i].get()->getWidth() + 4;
+
+        if(GBA_SCREEN_WIDTH - xZombie < space){
+            return true;
+        }
+    }
+    return false;
 }
 
 void GameScreen::checkBounds() {
@@ -188,17 +201,17 @@ void GameScreen::textOnScreen() {
     TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 5, 5);
     TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 7, 5);
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 9, 5);
-    TextStream::instance().setText(std::string("Life z: ") + std::to_string(zombies[0].get()->getLife()), 11, 5);
     TextStream::instance().setText(std::string("Bullets/Ammo: ") + std::to_string(person.getGun()->getBullets())
-    + "/" + std::to_string(ammountBullet), 13, 5);
+    + "/" + std::to_string(ammountBullet), 11, 5);
+    // TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, z);
 }
 
 void GameScreen::shopOnScreen(u16 keys) {
-    TextStream::instance().setText(std::string("Click A for AMMO (+20/+40/+10)  [-6p]"), 3, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO (+20/+40/+10)  [-6p]"), 5, 1);
     TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 7, 1);
-    TextStream::instance().setText(std::string("Click START to return"), 11, 1);
-    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 13, 1);
-    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 15, 1);
+    TextStream::instance().setText(std::string("Click START to return"), 9, 1);
+    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 11, 1);
+    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 13, 1);
 
     if(keys & KEY_A && !clicked_A) {
         if(points >= 6){
@@ -210,20 +223,20 @@ void GameScreen::shopOnScreen(u16 keys) {
         if(points >= 20){
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
-                ammountBullet = 25;
-                weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getX() + person.getWidth(),138, 0));
+                ammountBullet = 24;
+                weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getX() + person.getWidth(),138, 6));
                 person.setGun(weapon);
                 shootFast = false;
             }
             else if(chanceWeapon < 9){
-                ammountBullet = 70;
-                weapon = std::shared_ptr<Weapon>( new AK47(builder,person.getX() + person.getWidth(),138, 35));
+                ammountBullet = 60;
+                weapon = std::shared_ptr<Weapon>( new AK47(builder,person.getX() + person.getWidth()/2,137, 30));
                 person.setGun(weapon);
                 shootFast = true;
             }
             else{
                 ammountBullet = 15;
-                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX() + person.getWidth(),138, 1));
+                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX(),136, 1));
                 person.setGun(weapon);
                 shootFast = false;
             }
@@ -244,7 +257,7 @@ void GameScreen::quitShop() {
         zombies[i]->setVelocity(-1, 0);
     }
     for (int i = 0; i < bulletSprites.size(); ++i) {
-        bulletSprites[i]->setVelocity(2, 0);
+        bulletSprites[i]->setVelocity(bulletSpeed, 0);
     }
 }
 
@@ -277,7 +290,7 @@ void GameScreen::checkCollisions() {
             continue;
         }
         for (int j = 0; j < bulletSprites.size(); ++j) {
-            if (bulletSprites[i]->isOffScreen()) {
+            if (bulletSprites[j]->isOffScreen()) {
                 break;
             }
 
@@ -305,14 +318,13 @@ void GameScreen::checkCollisions() {
             }
         }
     }
-
 }
 
 void GameScreen::shoot() {
     if (shootTimer < 30 && !shootFast) {
         return;
     }
-    else if(shootTimer < 5 && shootFast) {
+    else if(shootTimer < 10 && shootFast) {
         return;
     }
     else {
@@ -322,9 +334,10 @@ void GameScreen::shoot() {
     weaponEmpty = !person.shoot();
 
     if (!weaponEmpty) {
+        int xGun = person.getGun()->getX();
         bulletSprites.push_back(builder
                                         .withSize(SIZE_8_8)
-                                        .withLocation(person.getGun()->getX(), person.getGun()->getY())
+                                        .withLocation(xGun, person.getGun()->getY())
                                         .withData(bulletTiles, sizeof(bulletTiles))
                                         .withVelocity(2, 0)
                                         .buildPtr());
@@ -333,12 +346,12 @@ void GameScreen::shoot() {
 }
 
 void GameScreen::removeExcessSprites() {
-    // kan niet in 1 frame verwijderen
+    // kan niet alle frames verwijderen
     // want om een of andere reden blijven de sprites zichtbaar ookal bestaan ze niet meer
     for (int i = zombiesDeleteQueue.size() - 1; i >= 0; --i) {
         zombies.erase(zombies.begin() + zombiesDeleteQueue[i]);
     }
-    for (int i = bulletSprites.size()-1; i >= 0; --i) {
+    for (int i = bulletsDeleteQueue.size()-1; i >= 0; --i) {
         if (bulletSprites[i]->isOffScreen()) {
             bulletSprites.erase(bulletSprites.begin() + i);
         }
@@ -369,6 +382,7 @@ void GameScreen::spawnZombie() {
     }
     else{
         countZombies = 0;
-        maxLife++;
+        maxLife = maxLife + 2;
+        maxZombies++;
     }
 }

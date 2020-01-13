@@ -26,19 +26,22 @@ private:
     bool clicked_A;
     bool clicked_B;
     bool clicked_START;
+
     int score;
     int points;
     int highscore;
     int ammountBullet;
+    int bulletSpeed = 4;
 
     bool moveLeft = false;
     bool moveRight = false;
     bool moveUp = false;
     bool moveDown = false;
+
     int jumpTimer = 0;
     int shootTimer = 1000;
-
     int countZombies = 0;
+    int maxZombies = 2;
     int maxLife = 2;
 
     bool shopAvialable = false;
@@ -69,6 +72,7 @@ public:
     void tick(u16 keys) override;
 
     bool canPersonJump();
+    bool zombieCollisions();
     void checkBounds();
     void move();
     void checkCollisions();
