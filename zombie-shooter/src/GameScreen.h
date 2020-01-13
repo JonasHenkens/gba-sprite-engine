@@ -31,6 +31,7 @@ private:
     int points;
     int highscore;
     int ammountBullet;
+    int zspeed;
     int bulletSpeed = 4;
 
     bool moveLeft = false;
@@ -42,6 +43,7 @@ private:
     int shootTimer = 1000;
     int countZombies = 0;
     int maxZombies = 2;
+    int zombieSpeedUp = 0;
     int maxLife = 2;
 
     bool shopAvialable = false;

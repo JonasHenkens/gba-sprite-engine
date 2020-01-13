@@ -55,6 +55,7 @@ void GameScreen::resetGame() {
     countZombies = 0;
     ammountBullet = 30;
     maxZombies = 2;
+    zspeed = 1;
     zombies = {};
     TextStream::instance().clear();
 
@@ -203,15 +204,15 @@ void GameScreen::textOnScreen() {
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 9, 5);
     TextStream::instance().setText(std::string("Bullets/Ammo: ") + std::to_string(person.getGun()->getBullets())
     + "/" + std::to_string(ammountBullet), 11, 5);
-    // TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, z);
+    // TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, x van zombie);
 }
 
 void GameScreen::shopOnScreen(u16 keys) {
-    TextStream::instance().setText(std::string("Click A for AMMO (+20/+40/+10)  [-6p]"), 5, 1);
-    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 7, 1);
-    TextStream::instance().setText(std::string("Click START to return"), 9, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO                (+20/+40/+10)  [-6p]"), 6, 1);
+    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 8, 1);
+    TextStream::instance().setText(std::string("Click START to return"), 13, 1);
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 11, 1);
-    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 13, 1);
+    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 12, 1);
 
     if(keys & KEY_A && !clicked_A) {
         if(points >= 6){
@@ -338,7 +339,7 @@ void GameScreen::shoot() {
         int space = person.getGun()->getWidth()/2;
         bulletSprites.push_back(builder
                                         .withSize(SIZE_8_8)
-                                        .withLocation(xGun + space, person.getGun()->getY())
+                                        .withLocation(xGun + space, person.getGun()->getY()+1)
                                         .withData(bulletTiles, sizeof(bulletTiles))
                                         .withVelocity(2, 0)
                                         .buildPtr());
@@ -379,11 +380,16 @@ void GameScreen::spawnZombie() {
     if(countZombies < 6){
         int life = rand() % maxLife + 1;
         countZombies++;
-        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1, 0, life)));
+        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1 * zspeed, 0, life)));
+    }
+    else if(zombieSpeedUp > 12){
+        maxZombies++;
+        zspeed++;
+        zombieSpeedUp = 0;
     }
     else{
         countZombies = 0;
         maxLife = maxLife + 2;
-        maxZombies++;
+        zombieSpeedUp++;
     }
 }
