@@ -305,7 +305,7 @@ void GameScreen::checkCollisions() {
         }
         for (int j = 0; j < bulletSprites.size(); ++j) {
             if (bulletSprites[j]->isOffScreen()) {
-                break;
+                continue;
             }
 
             if (zombies[i]->sprite->collidesWith(*bulletSprites[j])){
