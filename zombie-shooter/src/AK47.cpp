@@ -11,7 +11,7 @@ AK47::AK47(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
     setBuilder(builder, x, y);
     magazine = 30;
     bullets = bulletsBegin;
-    damage = 2;
+    damage = 3;
     chanceOfHeadshot = 4; // op 10
 }
 

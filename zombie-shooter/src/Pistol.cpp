@@ -11,7 +11,7 @@ Pistol::Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin) {
     setBuilder(builder, x, y);
     magazine = 6;
     bullets = bulletsBegin;
-    damage = 5;
+    damage = 6;
     chanceOfHeadshot = 2; // op 10
 }
 

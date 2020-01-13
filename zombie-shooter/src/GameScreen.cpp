@@ -214,16 +214,15 @@ void GameScreen::textOnScreen() {
 }
 
 void GameScreen::shopText() {
-    TextStream::instance().setText(std::string("Click A for AMMO                (+20/+40/+10)  [-6p]"), 6, 1);
-    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 8, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO                (+20/+40/+10)  [-6p]"), 9, 1);
+    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 11, 1);
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
-    TextStream::instance().setText(std::string("Points: "), 11, 1);
-    TextStream::instance().setText(std::string("Total Ammo: "), 12, 1);
 }
 
 void GameScreen::shopOnScreen(u16 keys) {
-    TextStream::instance().setText(std::to_string(points), 11, 9);
-    TextStream::instance().setText(std::to_string(person.getGun()->getBullets() + ammountBullet), 12, 13);
+    int totalBullets = person.getGun()->getBullets() + ammountBullet;
+    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 6, 1);
+    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(totalBullets), 7, 1);
 
     if(keys & KEY_A && !clicked_A) {
         if(points >= 6){
