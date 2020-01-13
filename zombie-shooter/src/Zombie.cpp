@@ -8,9 +8,14 @@
 #include "spritedata.h"
 
 Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints) {
-    setBuilder(builder, x, y);
-    setVelocity(dx, dy);
     life = lifePoints;
+    if(life < 5){
+        setBuilder(builder, x, y);
+    }
+    else{
+        setSprite(builder, x, y);
+    }
+    setVelocity(dx, dy);
 }
 
 std::vector<Sprite *> Zombie::sprites() {
@@ -27,6 +32,14 @@ void Zombie::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
             .buildPtr();
 }
 
+void Zombie::setSprite(SpriteBuilder<Sprite> builder, int x, int y) {
+    sprite = builder
+            .withSize(SIZE_16_32)
+            .withLocation(x, y)
+            .withData(zombieTiles2, sizeof(zombieTiles2))
+            .buildPtr();
+}
+
 void Zombie::setVelocity(int dx, int dy) {
     sprite->setVelocity(dx, dy);
 }
@@ -37,23 +50,6 @@ int Zombie::getX() {
 
 int Zombie::getY() {
     return sprite->getY();
-}
-
-int Zombie::getDx() {
-    return sprite->getDx();
-}
-
-int Zombie::getDy() {
-    return sprite->getDy();
-}
-
-int Zombie::getSpeedMultiplier() {
-    return speedMultiplier;
-}
-
-void Zombie::setSpeedMultiplier(int speedMultiplier) {
-    this->speedMultiplier = speedMultiplier;
-    setVelocity(sprite->getDx(), sprite->getDy());
 }
 
 int Zombie::getWidth(){
@@ -88,7 +84,3 @@ int Zombie::getLife() {
     return life;
 }
 
-void Zombie::setCoords(int x, int y) {
-    sprite->moveTo(x, y);
-
-}

@@ -60,6 +60,7 @@ void GameScreen::resetGame() {
     zombies = {};
     bulletSprites.clear();
     TextStream::instance().clear();
+    text();
 
     ammoDone = true;
     weaponEmpty = false;
@@ -183,6 +184,13 @@ void GameScreen::move() {
     moveRight = false;
 }
 
+void GameScreen::text() {
+    TextStream::instance().setText(std::string("Highscore: "), 5, 5);
+    TextStream::instance().setText(std::string("Score: "), 7, 5);
+    TextStream::instance().setText(std::string("Points: "), 9, 5);
+    TextStream::instance().setText(std::string("Bullets/Ammo: "), 11, 5);
+}
+
 void GameScreen::textOnScreen() {
     if(!ammoDone){
         TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 1, 5);
@@ -198,20 +206,24 @@ void GameScreen::textOnScreen() {
         TextStream::instance().setText("", 3, 5);
     }
 
-    TextStream::instance().setText(std::string("Highscore: ") + std::to_string(highscore), 5, 5);
-    TextStream::instance().setText(std::string("Score: ") + std::to_string(score), 7, 5);
-    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 9, 5);
-    TextStream::instance().setText(std::string("Bullets/Ammo: ") + std::to_string(person.getGun()->getBullets())
-    + "/" + std::to_string(ammountBullet), 11, 5);
-    // TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, x van zombie);
+    TextStream::instance().setText(std::to_string(highscore), 5, 16);
+    TextStream::instance().setText(std::to_string(score), 7, 12);
+    TextStream::instance().setText(std::to_string(points), 9, 13);
+    TextStream::instance().setText(std::to_string(person.getGun()->getBullets()) + "/" + std::to_string(ammountBullet), 11, 19);
+    //TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, 5);
 }
 
-void GameScreen::shopOnScreen(u16 keys) {
+void GameScreen::shopText() {
     TextStream::instance().setText(std::string("Click A for AMMO                (+20/+40/+10)  [-6p]"), 6, 1);
     TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 8, 1);
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
-    TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 11, 1);
-    TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(person.getGun()->getBullets() + ammountBullet), 12, 1);
+    TextStream::instance().setText(std::string("Points: "), 11, 1);
+    TextStream::instance().setText(std::string("Total Ammo: "), 12, 1);
+}
+
+void GameScreen::shopOnScreen(u16 keys) {
+    TextStream::instance().setText(std::to_string(points), 11, 9);
+    TextStream::instance().setText(std::to_string(person.getGun()->getBullets() + ammountBullet), 12, 13);
 
     if(keys & KEY_A && !clicked_A) {
         if(points >= 6){
@@ -252,6 +264,7 @@ void GameScreen::shopOnScreen(u16 keys) {
 void GameScreen::quitShop() {
     shopAvialable = false;
     TextStream::instance().clear();
+    text();
 
     for (int i = 0; i < zombies.size(); ++i) {
         zombies[i]->setVelocity(-1, 0);
@@ -264,6 +277,7 @@ void GameScreen::quitShop() {
 void GameScreen::openShop() {
     shopAvialable = true;
     TextStream::instance().clear();
+    shopText();
 
     for (int i = 0; i < zombies.size(); ++i) {
         zombies[i]->setVelocity(0, 0);
@@ -376,11 +390,6 @@ void GameScreen::removeExcessSprites() {
 }
 
 void GameScreen::spawnZombie() {
-    if(countZombies < 6){
-        int life = rand() % maxLife + 1;
-        countZombies++;
-        zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*zspeed, 0, life)));
-    }
     if(zombieSpeedUp > 3){
         maxZombies++;
         if(zspeed > 3){}
@@ -388,6 +397,12 @@ void GameScreen::spawnZombie() {
             zspeed++;
         }
         zombieSpeedUp = 0;
+    }
+    if(countZombies < 6){
+        int life = rand() % maxLife + 1;
+        countZombies++;
+        Zombie* z = new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*zspeed, 0, life);
+        zombies.push_back(std::shared_ptr<Zombie>(z));
     }
     else{
         countZombies = 0;

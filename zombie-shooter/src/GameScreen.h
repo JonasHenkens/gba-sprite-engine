@@ -56,7 +56,6 @@ private:
     std::vector<std::shared_ptr<Zombie>> zombies;
     std::vector<std::unique_ptr<Sprite>> bulletSprites;
     SpriteBuilder<Sprite> builder;
-    std::unique_ptr<Sprite> bullet;
 
     std::vector<int> bulletsToRemove;
     std::vector<int> zombiesToRemove;
@@ -80,7 +79,9 @@ public:
     void checkCollisions();
     void shoot();
 
+    void text();
     void textOnScreen();
+    void shopText();
     void shopOnScreen(u16 keys);
     void quitShop();
     void openShop();
