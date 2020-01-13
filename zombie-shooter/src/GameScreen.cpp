@@ -335,9 +335,10 @@ void GameScreen::shoot() {
 
     if (!weaponEmpty) {
         int xGun = person.getGun()->getX();
+        int space = person.getGun()->getWidth()/2;
         bulletSprites.push_back(builder
                                         .withSize(SIZE_8_8)
-                                        .withLocation(xGun, person.getGun()->getY())
+                                        .withLocation(xGun + space, person.getGun()->getY())
                                         .withData(bulletTiles, sizeof(bulletTiles))
                                         .withVelocity(2, 0)
                                         .buildPtr());
@@ -351,9 +352,9 @@ void GameScreen::removeExcessSprites() {
     for (int i = zombiesDeleteQueue.size() - 1; i >= 0; --i) {
         zombies.erase(zombies.begin() + zombiesDeleteQueue[i]);
     }
-    for (int i = bulletsDeleteQueue.size()-1; i >= 0; --i) {
-        if (bulletSprites[i]->isOffScreen()) {
-            bulletSprites.erase(bulletSprites.begin() + i);
+    for (int j = bulletsDeleteQueue.size()-1; j >= 0; --j) {
+        if (bulletSprites[j]->isOffScreen()) {
+            bulletSprites.erase(bulletSprites.begin() + j);
         }
     }
     bulletsDeleteQueue.clear();
