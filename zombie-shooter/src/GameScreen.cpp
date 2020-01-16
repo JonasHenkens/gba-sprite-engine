@@ -13,6 +13,7 @@
 #include "DeathScreen.h"
 #include "Bullet.h"
 #include "gameBackgroundImage.h"
+#include "gunshot.h"
 
 std::vector<Sprite *> GameScreen::sprites() {
     std::vector<Sprite *> sprites = {};
@@ -361,6 +362,8 @@ void GameScreen::shoot() {
                                         .withVelocity(2, 0)
                                         .buildPtr());
         updateSprites = true;
+
+        engine.get()->enqueueSound(gunshot, gunshot_bytes, 44100);
     }
 }
 
