@@ -229,10 +229,6 @@ void GameScreen::shopOnScreen(u16 keys) {
             int extraBullets = rand() % 24 + 2;
             ammountBullet = ammountBullet + extraBullets;
             points = points - 3;
-            TextStream::instance().setText(std::string(""), 5, 1);
-        }
-        else{
-            TextStream::instance().setText(std::string("Not enough points"), 5, 1);
         }
     }
     if(keys & KEY_B && !clicked_B) {
@@ -258,10 +254,6 @@ void GameScreen::shopOnScreen(u16 keys) {
             }
             engine->updateSpritesInScene();
             points = points - 15;
-            TextStream::instance().setText(std::string(""), 5, 1);
-        }
-        else{
-            TextStream::instance().setText(std::string("Not enough points"), 5, 1);
         }
     }
     if(keys & KEY_START && !clicked_START) {
