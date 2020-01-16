@@ -393,16 +393,16 @@ void GameScreen::removeExcessSprites() {
 void GameScreen::spawnZombie() {
     if(zombieSpeedUp > 3){
         maxZombies++;
-        if(zspeed > 3){}
-        else{
+        if(zspeed < 3){
             zspeed++;
         }
         zombieSpeedUp = 0;
     }
     if(countZombies < 6){
         int life = rand() % maxLife + 1;
+        int speed = rand() % zspeed + 1;
         countZombies++;
-        Zombie* z = new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*zspeed, 0, life);
+        Zombie* z = new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life);
         zombies.push_back(std::shared_ptr<Zombie>(z));
     }
     else{
