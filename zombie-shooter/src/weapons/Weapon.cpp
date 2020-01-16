@@ -70,9 +70,5 @@ std::vector<Sprite *> Weapon::sprites() {
     std::vector<Sprite *> sprites = {
             sprite.get()
     };
-
-    for (int i = 0; i < activeBullets.size(); ++i) {
-        sprites.push_back(activeBullets[i]->sprites()[0]);
-    }
     return sprites;
 }

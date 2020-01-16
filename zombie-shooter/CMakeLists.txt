@@ -12,7 +12,6 @@ add_executable(${PROJECT_NAME}.elf
         src/Person.cpp src/Person.h
         src/weapons/Pistol.cpp src/weapons/Pistol.h
         src/Zombie.cpp src/Zombie.h
-        src/Bullet.cpp src/Bullet.h
         src/weapons/Sniper.cpp src/weapons/Sniper.h
         src/weapons/AK47.cpp src/weapons/AK47.h src/resources/gameBackgroundImage.h src/resources/gunshot.h)
 

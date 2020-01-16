@@ -6,8 +6,8 @@
 #define GIT_WEAPON_H
 
 #include <libgba-sprite-engine/sprites/sprite.h>
+#include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <vector>
-#include "../Bullet.h"
 
 class Weapon {
 protected:
@@ -20,7 +20,6 @@ protected:
     virtual void setBuilder(SpriteBuilder<Sprite> builder, int x, int y) = 0;
 public:
     std::unique_ptr<Sprite> sprite;
-    std::vector<std::shared_ptr<Bullet>> activeBullets;
     std::vector<Sprite *> sprites();
 
     int getDamage();
