@@ -63,6 +63,11 @@ private:
     std::vector<int> zombiesDeleteQueue;
 
     bool updateSprites = false;
+    int level = 1;
+    int openShopNow = false;
+    int spawnedZombies;
+    int spawnDelayCounter = 20;
+
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -90,6 +95,8 @@ public:
 
     void removeExcessSprites();
     void spawnZombie();
+
+    void tickSpawnLogic();
 };
 
 

@@ -4,6 +4,7 @@
 
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <libgba-sprite-engine/background/text_stream.h>
+#include <math.h>
 
 #include "GameScreen.h"
 #include "pats.h"
@@ -88,10 +89,7 @@ void GameScreen::tick(u16 keys) {
     }
 
     textOnScreen();
-
-    if (zombies.size() < maxZombies && !zombieCollisions()) {
-        spawnZombie();
-    }
+    tickSpawnLogic();
 
     if(keys & KEY_LEFT) {
         moveLeft = true;
@@ -108,9 +106,9 @@ void GameScreen::tick(u16 keys) {
     if(keys & KEY_B) {
         shoot();
     }
-    if(keys & KEY_START && !clicked_START) {
+    if(openShopNow) {
         openShop();
-        clicked_START = keys & KEY_START;
+        openShopNow = false;
         return;
     }
     clicked_START = keys & KEY_START;
@@ -189,7 +187,7 @@ void GameScreen::move() {
     moveRight = false;
 }
 
-void GameScreen::text() {
+void GameScreen::text() {;
     TextStream::instance().setText(std::string("Highscore: "), 5, 5);
     TextStream::instance().setText(std::string("Score: "), 7, 5);
     TextStream::instance().setText(std::string("Points: "), 9, 5);
@@ -210,7 +208,8 @@ void GameScreen::textOnScreen() {
     else{
         TextStream::instance().setText("", 3, 5);
     }
-
+    TextStream::instance().setFontColor(0);
+    TextStream::instance().setText("Wave: " + std::to_string(level), 3, 5);
     TextStream::instance().setText(std::to_string(highscore), 5, 16);
     TextStream::instance().setText(std::to_string(score), 7, 12);
     TextStream::instance().setText(std::to_string(points), 9, 13);
@@ -388,28 +387,28 @@ void GameScreen::removeExcessSprites() {
     updateSprites = true;
 }
 
-void GameScreen::spawnZombie() {
-    if(zombieSpeedUp > 3){
-        maxZombies++;
-        if(zspeed < 3){
-            zspeed++;
+void GameScreen::tickSpawnLogic() {
+    if (spawnedZombies >= level*5) {
+        if (zombies.size() <= 0) {
+            openShopNow = true;
+            level++;
+            spawnedZombies = 0;
         }
-        zombieSpeedUp = 0;
+        return;
     }
-    if(countZombies < 6){
-        int life = rand() % maxLife + 1;
-        int speed = rand() % zspeed + 1;
-        countZombies++;
-        if (countZombies%5 == 0) {
-            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 113, -1*speed, 0, life, 2)));
-        } else {
-            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life)));
-        }
+    if (spawnDelayCounter <= 0) {
+        int life = rand() % (level*2) + level;
+        double speed = -pow(level, 0.45);
 
+        if (spawnedZombies%5 == 0) {
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 113, speed, 0, life, 2)));
+        } else {
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, speed, 0, life)));
+        }
+        spawnedZombies++;
+        spawnDelayCounter = (int)(45.0-8*pow(level, 0.65));
+        if (spawnDelayCounter < 10 ||spawnDelayCounter >= 60) spawnDelayCounter = 10;
     }
-    else{
-        countZombies = 0;
-        maxLife = maxLife + 2;
-        zombieSpeedUp++;
-    }
+
+    spawnDelayCounter--;
 }
