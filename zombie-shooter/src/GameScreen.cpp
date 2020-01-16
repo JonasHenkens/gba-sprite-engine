@@ -51,7 +51,7 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
-    points = 1000;
+    points = 0;
     zombieSpeedUp = 0;
     countZombies = 0;
     ammountBullet = 30;
@@ -214,7 +214,7 @@ void GameScreen::textOnScreen() {
 }
 
 void GameScreen::shopText() {
-    TextStream::instance().setText(std::string("Click A for AMMO                (+20/+40/+10)  [-6p]"), 9, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO                (2-25 BULLETS)  [-6p]"), 9, 1);
     TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 11, 1);
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
 }
@@ -226,7 +226,8 @@ void GameScreen::shopOnScreen(u16 keys) {
 
     if(keys & KEY_A && !clicked_A) {
         if(points >= 6){
-            ammountBullet = ammountBullet + 30;
+            int extraBullets = rand() % 24 + 2;
+            ammountBullet = ammountBullet + extraBullets;
             points = points - 6;
         }
     }
