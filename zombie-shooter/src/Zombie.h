@@ -10,14 +10,14 @@
 
 class Zombie {
 private:
+
     int life;
     int speedMultiplier = 1;
-    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
-    void setBuilder2(SpriteBuilder<Sprite> builder, int x, int y);
 public:
     bool deleted = false;
     std::unique_ptr<Sprite> sprite;
     Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int life);
+    Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints, int spriteID);
     bool isDead();
     int getLife();
     void hit(int damage, bool isHeadshot);
@@ -30,6 +30,8 @@ public:
     int getHeight();
 
     void setVelocity(int dx, int dy);
+
+    void setSprite(SpriteBuilder<Sprite> builder, int x, int y, int spriteID);
 };
 
 

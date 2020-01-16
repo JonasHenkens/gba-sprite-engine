@@ -10,11 +10,17 @@
 Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints) {
     life = lifePoints;
     if(life <= 6){
-        setBuilder(builder, x, y);
+        setSprite(builder, x, y, 0);
     }
     else{
-        setBuilder2(builder, x, y);
+        setSprite(builder, x, y, 1);
     }
+    setVelocity(dx, dy);
+}
+
+Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints, int spriteID) {
+    life = lifePoints;
+    setSprite(builder, x, y, spriteID);
     setVelocity(dx, dy);
 }
 
@@ -22,22 +28,6 @@ std::vector<Sprite *> Zombie::sprites() {
     return {
             sprite.get()
     };
-}
-
-void Zombie::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
-    sprite = builder
-            .withSize(SIZE_16_32)
-            .withLocation(x, y)
-            .withData(zombieTiles, sizeof(zombieTiles))
-            .buildPtr();
-}
-
-void Zombie::setBuilder2(SpriteBuilder<Sprite> builder, int x, int y) {
-    sprite = builder
-            .withSize(SIZE_16_32)
-            .withLocation(x, y)
-            .withData(zombieTiles2, sizeof(zombieTiles2))
-            .buildPtr();
 }
 
 void Zombie::setVelocity(int dx, int dy) {
@@ -84,3 +74,29 @@ int Zombie::getLife() {
     return life;
 }
 
+void Zombie::setSprite(SpriteBuilder<Sprite> builder, int x, int y, int spriteID) {
+    switch(spriteID) {
+        case 0 :
+            sprite = builder
+                    .withSize(SIZE_16_32)
+                    .withLocation(x, y)
+                    .withData(zombieTiles, sizeof(zombieTiles))
+                    .buildPtr();
+            break;
+        case 1 :
+            sprite = builder
+                    .withSize(SIZE_16_32)
+                    .withLocation(x, y)
+                    .withData(zombie2Tiles, sizeof(zombie2Tiles))
+                    .buildPtr();
+            break;
+        case 2 :
+            sprite = builder
+                    .withSize(SIZE_32_16)
+                    .withAnimated(2, 10)
+                    .withLocation(x, y)
+                    .withData(flyingzombieTiles, sizeof(flyingzombieTiles))
+                    .buildPtr();
+            break;
+    }
+}

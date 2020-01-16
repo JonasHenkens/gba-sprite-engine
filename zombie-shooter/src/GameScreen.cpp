@@ -402,8 +402,12 @@ void GameScreen::spawnZombie() {
         int life = rand() % maxLife + 1;
         int speed = rand() % zspeed + 1;
         countZombies++;
-        Zombie* z = new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life);
-        zombies.push_back(std::shared_ptr<Zombie>(z));
+        if (countZombies%5 == 0) {
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 112, -1*speed, 0, life, 2)));
+        } else {
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life)));
+        }
+
     }
     else{
         countZombies = 0;
