@@ -9,7 +9,7 @@
 #include "DeathScreen.h"
 #include "GameScreen.h"
 
-#include "DeathScreenImage.h"
+#include "../resources/DeathScreenImage.h"
 
 DeathScreen::DeathScreen(const std::shared_ptr<GBAEngine> &engine, int score, int highscore) : Scene(engine), score(score), highscore(highscore) {}
 

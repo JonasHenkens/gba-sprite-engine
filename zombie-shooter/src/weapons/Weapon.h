@@ -7,7 +7,7 @@
 
 #include <libgba-sprite-engine/sprites/sprite.h>
 #include <vector>
-#include "Bullet.h"
+#include "../Bullet.h"
 
 class Weapon {
 protected:
@@ -16,6 +16,8 @@ protected:
     int damage; // Damage of weapon
     int chanceOfHeadshot; // Random headshot kills
     SpriteBuilder<Sprite> builder;
+
+    virtual void setBuilder(SpriteBuilder<Sprite> builder, int x, int y) = 0;
 public:
     std::unique_ptr<Sprite> sprite;
     std::vector<std::shared_ptr<Bullet>> activeBullets;
@@ -27,7 +29,7 @@ public:
     int getHeadshotChance();
     void reload(int ammo);
     void move (bool up, bool down, bool left, bool right);
-    virtual void shoot() = 0;
+    void shoot();
     int getX();
     int getY();
     int getWidth();

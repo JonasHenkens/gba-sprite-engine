@@ -3,7 +3,7 @@
 //
 
 #include "Person.h"
-#include "spritedata.h"
+#include "resources/spritedata.h"
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 

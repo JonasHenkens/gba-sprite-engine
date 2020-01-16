@@ -2,20 +2,19 @@ project(zombieshooter)
 
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
-        src/pats.h src/spritedata.h
-        src/dead.h src/splashimage.h
-        src/GameScreen.cpp src/GameScreen.h
-        src/DeathScreen.cpp src/DeathScreen.h
-        src/StartScreen.cpp src/StartScreen.h
-        src/DeathScreenImage.h
-        src/startscreenimage.h
-        src/Weapon.cpp src/Weapon.h
+        src/resources/spritedata.h
+        src/Screens/GameScreen.cpp src/Screens/GameScreen.h
+        src/Screens/DeathScreen.cpp src/Screens/DeathScreen.h
+        src/Screens/StartScreen.cpp src/Screens/StartScreen.h
+        src/resources/DeathScreenImage.h
+        src/resources/startscreenimage.h
+        src/weapons/Weapon.cpp src/weapons/Weapon.h
         src/Person.cpp src/Person.h
-        src/Pistol.cpp src/Pistol.h
+        src/weapons/Pistol.cpp src/weapons/Pistol.h
         src/Zombie.cpp src/Zombie.h
         src/Bullet.cpp src/Bullet.h
-        src/Sniper.cpp src/Sniper.h
-        src/AK47.cpp src/AK47.h src/gameBackgroundImage.h src/gunshot.h)
+        src/weapons/Sniper.cpp src/weapons/Sniper.h
+        src/weapons/AK47.cpp src/weapons/AK47.h src/resources/gameBackgroundImage.h src/resources/gunshot.h)
 
 target_link_libraries(${PROJECT_NAME}.elf gba-sprite-engine)
 

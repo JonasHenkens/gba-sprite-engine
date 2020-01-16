@@ -5,7 +5,7 @@
 #include "Zombie.h"
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
-#include "spritedata.h"
+#include "resources/spritedata.h"
 
 Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints) {
     life = lifePoints;

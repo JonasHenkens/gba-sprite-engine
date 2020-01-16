@@ -12,7 +12,6 @@ class Zombie {
 private:
 
     int life;
-    int speedMultiplier = 1;
 public:
     bool deleted = false;
     std::unique_ptr<Sprite> sprite;

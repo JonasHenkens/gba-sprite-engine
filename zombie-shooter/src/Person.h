@@ -7,11 +7,11 @@
 
 
 #include <libgba-sprite-engine/gba/tonc_types.h>
-#include "Weapon.h"
+#include "weapons/Weapon.h"
 #include <libgba-sprite-engine/sprites/sprite.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <vector>
-#include "Pistol.h"
+#include "weapons/Pistol.h"
 
 class Person {
 private:

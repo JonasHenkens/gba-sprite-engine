@@ -13,10 +13,9 @@
 
 class AK47 : public Weapon {
 private:
-    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
+    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y) override;
 public:
     AK47(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin);
-    void shoot() override;
 };
 
 

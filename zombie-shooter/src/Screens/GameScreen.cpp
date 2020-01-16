@@ -4,17 +4,14 @@
 
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <libgba-sprite-engine/background/text_stream.h>
-#include <math.h>
+#include <cmath>
 
 #include "GameScreen.h"
-#include "pats.h"
-#include "dead.h"
-#include "spritedata.h"
-#include "Person.h"
+#include "../resources/spritedata.h"
+#include "../Person.h"
 #include "DeathScreen.h"
-#include "Bullet.h"
-#include "gameBackgroundImage.h"
-#include "gunshot.h"
+#include "../resources/gameBackgroundImage.h"
+#include "../resources/gunshot.h"
 
 std::vector<Sprite *> GameScreen::sprites() {
     std::vector<Sprite *> sprites = {};
@@ -22,21 +19,17 @@ std::vector<Sprite *> GameScreen::sprites() {
     for (int h = 0; h < weapon->sprites().size(); ++h) {
         sprites.push_back(weapon->sprites()[h]);
     }
-
     for (int i = 0; i < person.sprites().size(); ++i) {
         sprites.push_back(person.sprites()[i]);
     }
-
     for (int j = 0; j < zombies.size(); ++j) {
         for (int i = 0; i < zombies[j]->sprites().size(); ++i) {
             sprites.push_back(zombies[j]->sprites()[i]);
         }
     }
-
     for (int i = 0; i < bulletSprites.size(); ++i) {
         sprites.push_back(bulletSprites[i].get());
     }
-
     return sprites;
 }
 
@@ -46,31 +39,15 @@ std::vector<Background *> GameScreen::backgrounds() {
     };
 }
 
-void GameScreen::youDied() {
-    if(highscore < score) highscore = score;
-    engine->setScene(new DeathScreen(engine, score, highscore));
-}
+void GameScreen::load() {
+    engine->enableText();
+    foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(spritedataSharedPal, sizeof(spritedataSharedPal)));
 
-void GameScreen::resetGame() {
-    score = 0;
-    points = 0;
-    zombieSpeedUp = 0;
-    countZombies = 0;
-    ammountBullet = 30;
-    maxZombies = 2;
-    zspeed = 1;
-    zombies = {};
-    bulletSprites.clear();
-    TextStream::instance().clear();
-    text();
+    backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(gameBackgroundPal, sizeof(gameBackgroundPal)));
+    bg = std::unique_ptr<Background>(new Background(1, gameBackgroundTiles, sizeof(gameBackgroundTiles), gameBackgroundMap, sizeof(gameBackgroundMap)));
+    bg->useMapScreenBlock(16);
 
-    ammoDone = true;
-    weaponEmpty = false;
-    shootFast = false;
-    shopAvialable = false;
-    clicked_A = false;
-    clicked_B = false;
-    clicked_START = false;
+    showGameText();
 
     person.setBuilder(builder, 0, 128);
     person.move(false, false, false, false);
@@ -78,8 +55,13 @@ void GameScreen::resetGame() {
     person.setGun(weapon);
 }
 
+void GameScreen::died() {
+    if(highscore < score) highscore = score;
+    engine->setScene(new DeathScreen(engine, score, highscore));
+}
+
 void GameScreen::tick(u16 keys) {
-    if(shopAvialable){
+    if(isShopOpened){
         shopOnScreen(keys);
         clicked_A = keys & KEY_A;
         clicked_B = keys & KEY_B;
@@ -88,17 +70,13 @@ void GameScreen::tick(u16 keys) {
         return;
     }
 
-    textOnScreen();
+    updateGameText();
     tickSpawnLogic();
 
-    if(keys & KEY_LEFT) {
-        moveLeft = true;
-    }
-    if(keys & KEY_RIGHT) {
-        moveRight = true;
-    }
+    moveLeft = keys & KEY_LEFT;
+    moveRight = keys & KEY_RIGHT;
     if(keys & KEY_A && canPersonJump()){
-        ammoDone = person.reload(&ammountBullet);
+        person.reload(&ammountBullet);
     }
     else if(keys & KEY_UP && canPersonJump()) {
         jumpTimer = 16;
@@ -133,34 +111,9 @@ void GameScreen::tick(u16 keys) {
     }
 }
 
-void GameScreen::load() {
-    engine.get()->enableText();
-    foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(spritedataSharedPal, sizeof(spritedataSharedPal)));
-
-    backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(gameBackgroundPal, sizeof(gameBackgroundPal)));
-    bg = std::unique_ptr<Background>(new Background(1, gameBackgroundTiles, sizeof(gameBackgroundTiles), gameBackgroundMap, sizeof(gameBackgroundMap)));
-    bg.get()->useMapScreenBlock(16);
-
-    resetGame();
-}
 
 bool GameScreen::canPersonJump() {
-    if (person.getY() == 128) {
-        return true;
-    }
-    else return false;
-}
-
-bool GameScreen::zombieCollisions() {
-    for (int i = 0; i < zombies.size(); ++i) {
-        int xZombie = zombies[i].get()->getX();
-        int space = zombies[i].get()->getWidth() + 4;
-
-        if(GBA_SCREEN_WIDTH - xZombie < space){
-            return true;
-        }
-    }
-    return false;
+    return person.getY() == 128;
 }
 
 void GameScreen::checkBounds() {
@@ -187,37 +140,27 @@ void GameScreen::move() {
     moveRight = false;
 }
 
-void GameScreen::text() {;
+void GameScreen::showGameText() {;
     TextStream::instance().setText(std::string("Highscore: "), 5, 5);
     TextStream::instance().setText(std::string("Score: "), 7, 5);
     TextStream::instance().setText(std::string("Points: "), 9, 5);
     TextStream::instance().setText(std::string("Bullets/Ammo: "), 11, 5);
 }
 
-void GameScreen::textOnScreen() {
-    if(!ammoDone){
-        TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 1, 5);
-    }
-    else{
-        TextStream::instance().setText("", 1, 5);
-    }
+void GameScreen::updateGameText() {
+    if(ammountBullet == 0) TextStream::instance().setText(std::string("NO AMMUNITION !!!"), 1, 5);
+    else if(person.getGun()->getBullets() == 0)TextStream::instance().setText(std::string("RELOAD!!!"), 1, 5);
+    else TextStream::instance().setText("", 1, 5);
 
-    if(weaponEmpty){
-        TextStream::instance().setText(std::string("RELOAD!!!"), 3, 5);
-    }
-    else{
-        TextStream::instance().setText("", 3, 5);
-    }
     TextStream::instance().setFontColor(0);
     TextStream::instance().setText("Wave: " + std::to_string(level), 3, 5);
     TextStream::instance().setText(std::to_string(highscore), 5, 16);
     TextStream::instance().setText(std::to_string(score), 7, 12);
     TextStream::instance().setText(std::to_string(points), 9, 13);
     TextStream::instance().setText(std::to_string(person.getGun()->getBullets()) + "/" + std::to_string(ammountBullet), 11, 19);
-    //TextStream::instance().setText(std::to_string(zombies[0].get()->getLife()), 13, 5);
 }
 
-void GameScreen::shopText() {
+void GameScreen::showShopText() {
     TextStream::instance().setText(std::string("Click A for AMMO                (2-25 BULLETS)  [-3p]"), 9, 1);
     TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-15p]"), 11, 1);
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
@@ -265,9 +208,9 @@ void GameScreen::shopOnScreen(u16 keys) {
 }
 
 void GameScreen::quitShop() {
-    shopAvialable = false;
+    isShopOpened = false;
     TextStream::instance().clear();
-    text();
+    showGameText();
 
     for (int i = 0; i < zombies.size(); ++i) {
         zombies[i]->setVelocity(-1, 0);
@@ -278,15 +221,15 @@ void GameScreen::quitShop() {
 }
 
 void GameScreen::openShop() {
-    shopAvialable = true;
+    isShopOpened = true;
     TextStream::instance().clear();
-    shopText();
+    showShopText();
 
-    for (int i = 0; i < zombies.size(); ++i) {
-        zombies[i]->setVelocity(0, 0);
+    for (auto & zombie : zombies) {
+        zombie->setVelocity(0, 0);
     }
-    for (int i = 0; i < bulletSprites.size(); ++i) {
-        bulletSprites[i]->setVelocity(0, 0);
+    for (auto & bulletSprite : bulletSprites) {
+        bulletSprite->setVelocity(0, 0);
     }
 
     person.sprite->setVelocity(0, 0);
@@ -296,10 +239,10 @@ void GameScreen::openShop() {
 void GameScreen::checkCollisions() {
     for (int i = 0; i < zombies.size(); ++i) {
         if (zombies[i]->deleted) {
-            break;
+            continue;
         }
         if (person.sprite->collidesWith(*zombies[i]->sprite)){
-            youDied();
+            died();
             break;
         }
         if (zombies[i]->getX() < 0 - zombies[i]->getWidth()){
@@ -308,22 +251,16 @@ void GameScreen::checkCollisions() {
         }
         for (int j = 0; j < bulletSprites.size(); ++j) {
             if (zombies[i]->sprite->collidesWith(*bulletSprites[j])){
-                bool headshot = false;
                 int damageGun = person.getGun()->getDamage();
                 int chanceHeadshot = person.getGun()->getHeadshotChance();
                 int chance = rand() % 10 + 1;
+                bool headshot = chance <= chanceHeadshot;
 
-                if(chance <= chanceHeadshot){
-                    headshot = true;
-                }
-
-                if(damageGun >= zombies[i].get()->getLife()){
+                zombies[i]->hit(damageGun, headshot);
+                if (zombies[i]->getLife() <= 0) {
                     zombiesToRemove.push_back(i);
                     score++;
                     points++;
-                }
-                else{
-                    zombies[i].get()->hit(damageGun, headshot);
                 }
                 bulletSprites[j]->moveTo(260, 180);
                 break;
@@ -333,30 +270,22 @@ void GameScreen::checkCollisions() {
 }
 
 void GameScreen::shoot() {
-    if (shootTimer < 25 && !shootFast) {
-        return;
-    }
-    else if(shootTimer < 7 && shootFast) {
-        return;
-    }
-    else {
-        shootTimer = 0;
-    }
+    if (shootTimer < 7 && shootFast) return;
+    else if (shootTimer < 25) return;
+    else shootTimer = 0;
 
-    weaponEmpty = !person.shoot();
-
-    if (!weaponEmpty) {
+    if (person.shoot()) {
         int xGun = person.getGun()->getX();
         int space = person.getGun()->getWidth()/2;
         bulletSprites.push_back(builder
                                         .withSize(SIZE_8_8)
                                         .withLocation(xGun + space, person.getGun()->getY()+1)
                                         .withData(bulletTiles, sizeof(bulletTiles))
-                                        .withVelocity(2, 0)
+                                        .withVelocity(bulletSpeed, 0)
                                         .buildPtr());
         updateSprites = true;
 
-        engine.get()->enqueueSound(gunshot, gunshot_bytes, 44100);
+        engine->enqueueSound(gunshot, gunshot_bytes, 44100);
     }
 }
 
@@ -389,7 +318,7 @@ void GameScreen::removeExcessSprites() {
 
 void GameScreen::tickSpawnLogic() {
     if (spawnedZombies >= level*5) {
-        if (zombies.size() <= 0) {
+        if (zombies.empty()) {
             openShopNow = true;
             level++;
             spawnedZombies = 0;

@@ -13,9 +13,8 @@
 class Bullet {
 private:
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
-public:
-    bool deleted = false;
     std::unique_ptr<Sprite> sprite;
+public:
     std::vector<Sprite *> sprites();
 
     Bullet(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
@@ -23,6 +22,5 @@ public:
 
     void setVelocity(int dx);
 };
-
 
 #endif //GBA_SPRITE_ENGINE_PROJECT_BULLET_H

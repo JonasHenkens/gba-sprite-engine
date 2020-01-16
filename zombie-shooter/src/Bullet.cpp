@@ -5,7 +5,7 @@
 #include "Bullet.h"
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
-#include "spritedata.h"
+#include "resources/spritedata.h"
 
 Bullet::Bullet(SpriteBuilder<Sprite> builder, int x, int y, int dx) {
     setBuilder(builder, x, y);

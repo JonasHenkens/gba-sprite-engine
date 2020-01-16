@@ -13,15 +13,11 @@
 
 class Pistol: public Weapon {
 private:
-    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
+    void setBuilder(SpriteBuilder<Sprite> builder, int x, int y) override;
 public:
 
-    //Pistol(SpriteBuilder<Sprite> builder, int x, int y) {setBuilder(builder, x, y);};
     Pistol(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin);
     Pistol()= default;
-    void shoot() override;
-
-
 
 };
 

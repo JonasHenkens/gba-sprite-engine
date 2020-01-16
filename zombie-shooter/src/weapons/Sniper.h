@@ -16,7 +16,6 @@ private:
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
 public:
     Sniper(SpriteBuilder<Sprite> builder, int x, int y, int bulletsBegin);
-    void shoot() override;
 };
 
 

@@ -3,7 +3,7 @@
 //
 
 #include "Sniper.h"
-#include "spritedata.h"
+#include "../resources/spritedata.h"
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 
@@ -21,8 +21,4 @@ void Sniper::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
             .withLocation(x, y)
             .withData(sniperTiles, sizeof(sniperTiles))
             .buildPtr();
-}
-
-void Sniper::shoot() {
-    bullets--;
 }

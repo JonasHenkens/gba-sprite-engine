@@ -8,30 +8,25 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/scene.h>
 #include <vector>
-#include "Person.h"
-#include "Zombie.h"
-#include "Bullet.h"
-#include "Weapon.h"
-#include "Pistol.h"
-#include "Sniper.h"
-#include "AK47.h"
+#include "../Person.h"
+#include "../Zombie.h"
+#include "../weapons/Weapon.h"
+#include "../weapons/Pistol.h"
+#include "../weapons/Sniper.h"
+#include "../weapons/AK47.h"
 
 class GameScreen : public Scene {
 private:
     std::unique_ptr<Background> bg;
-    bool dead;
-    bool ammoDone;
-    bool weaponEmpty;
-    bool shootFast;
-    bool clicked_A;
-    bool clicked_B;
-    bool clicked_START;
+    bool shootFast = false;
+    bool clicked_A = false;
+    bool clicked_B = false;
+    bool clicked_START = false;
 
-    int score;
-    int points;
+    int score = 0;
+    int points = 0;
     int highscore;
-    int ammountBullet;
-    int zspeed;
+    int ammountBullet = 30;
     int bulletSpeed = 4;
 
     bool moveLeft = false;
@@ -41,15 +36,10 @@ private:
 
     int jumpTimer = 0;
     int shootTimer = 1000;
-    int countZombies = 0;
-    int maxZombies = 2;
-    int zombieSpeedUp;
-    int maxLife = 2;
 
-    bool shopAvialable = false;
+    bool isShopOpened = false;
 
-    void youDied();
-    void resetGame();
+    void died();
 
     Person person;
     std::shared_ptr<Weapon> weapon;
@@ -57,15 +47,13 @@ private:
     std::vector<std::unique_ptr<Sprite>> bulletSprites;
     SpriteBuilder<Sprite> builder;
 
-    //std::vector<int> bulletsToRemove;
     std::vector<int> zombiesToRemove;
-    //std::vector<int> bulletsDeleteQueue;
     std::vector<int> zombiesDeleteQueue;
 
     bool updateSprites = false;
     int level = 1;
     int openShopNow = false;
-    int spawnedZombies;
+    int spawnedZombies = 0;
     int spawnDelayCounter = 20;
 
 
@@ -86,15 +74,14 @@ public:
     void checkCollisions();
     void shoot();
 
-    void text();
-    void textOnScreen();
-    void shopText();
+    void showGameText();
+    void updateGameText();
+    void showShopText();
     void shopOnScreen(u16 keys);
     void quitShop();
     void openShop();
 
     void removeExcessSprites();
-    void spawnZombie();
 
     void tickSpawnLogic();
 };
