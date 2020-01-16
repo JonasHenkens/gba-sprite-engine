@@ -253,7 +253,7 @@ void GameScreen::shopOnScreen(u16 keys) {
             }
             else{
                 ammountBullet = 15;
-                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX(),person.getY(), 1));
+                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX(),person.getY()+1, 1));
                 person.setGun(weapon);
                 shootFast = false;
             }
@@ -385,7 +385,6 @@ void GameScreen::removeExcessSprites() {
         }
     }
 
-
     updateSprites = true;
 }
 
@@ -402,7 +401,7 @@ void GameScreen::spawnZombie() {
         int speed = rand() % zspeed + 1;
         countZombies++;
         if (countZombies%5 == 0) {
-            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 116, -1*speed, 0, life, 2)));
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 113, -1*speed, 0, life, 2)));
         } else {
             zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life)));
         }
