@@ -52,7 +52,7 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
-    points = 0;
+    points = 1000;
     zombieSpeedUp = 0;
     countZombies = 0;
     ammountBullet = 30;
@@ -241,19 +241,19 @@ void GameScreen::shopOnScreen(u16 keys) {
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
                 ammountBullet = 24;
-                weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getX() + person.getWidth(),138, 6));
+                weapon = std::shared_ptr<Weapon>(new Pistol(builder,person.getX() + person.getWidth(),person.getY()+10, 6));
                 person.setGun(weapon);
                 shootFast = false;
             }
             else if(chanceWeapon < 9){
                 ammountBullet = 60;
-                weapon = std::shared_ptr<Weapon>( new AK47(builder,person.getX() + person.getWidth()/2,137, 30));
+                weapon = std::shared_ptr<Weapon>( new AK47(builder,person.getX() + person.getWidth()/2,person.getY() + 9, 30));
                 person.setGun(weapon);
                 shootFast = true;
             }
             else{
                 ammountBullet = 15;
-                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX(),136, 1));
+                weapon = std::shared_ptr<Weapon>(new Sniper(builder,person.getX(),person.getY(), 1));
                 person.setGun(weapon);
                 shootFast = false;
             }
