@@ -270,8 +270,8 @@ void GameScreen::checkCollisions() {
 }
 
 void GameScreen::shoot() {
-    if (shootTimer < 7 && shootFast) return;
-    else if (shootTimer < 25) return;
+    if (shootTimer < 25 && !shootFast) return;
+    else if (shootTimer < 7 && shootFast) return;
     else shootTimer = 0;
 
     if (person.shoot()) {
