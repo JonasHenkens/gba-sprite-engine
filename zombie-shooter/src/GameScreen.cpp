@@ -52,7 +52,7 @@ void GameScreen::youDied() {
 
 void GameScreen::resetGame() {
     score = 0;
-    points = 1000;
+    points = 0;
     zombieSpeedUp = 0;
     countZombies = 0;
     ammountBullet = 30;
