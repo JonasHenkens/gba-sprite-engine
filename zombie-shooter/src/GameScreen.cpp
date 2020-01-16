@@ -305,6 +305,7 @@ void GameScreen::checkCollisions() {
         }
         for (int j = 0; j < bulletSprites.size(); ++j) {
             if (bulletSprites[j]->isOffScreen()) {
+                bulletSprites[j]->setVelocity(0,0);
                 continue;
             }
 
