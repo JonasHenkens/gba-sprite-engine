@@ -214,8 +214,8 @@ void GameScreen::textOnScreen() {
 }
 
 void GameScreen::shopText() {
-    TextStream::instance().setText(std::string("Click A for AMMO                (2-25 BULLETS)  [-6p]"), 9, 1);
-    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-20p]"), 11, 1);
+    TextStream::instance().setText(std::string("Click A for AMMO                (2-25 BULLETS)  [-3p]"), 9, 1);
+    TextStream::instance().setText(std::string("Click B for NEW WEAPON          (PISTOL/AK-47/SNIPER) [-15p]"), 11, 1);
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
 }
 
@@ -225,14 +225,14 @@ void GameScreen::shopOnScreen(u16 keys) {
     TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(totalBullets), 7, 1);
 
     if(keys & KEY_A && !clicked_A) {
-        if(points >= 6){
+        if(points >= 3){
             int extraBullets = rand() % 24 + 2;
             ammountBullet = ammountBullet + extraBullets;
-            points = points - 6;
+            points = points - 3;
         }
     }
     if(keys & KEY_B && !clicked_B) {
-        if(points >= 20){
+        if(points >= 15){
             int chanceWeapon = rand() % 10 + 1;
             if(chanceWeapon < 5){
                 ammountBullet = 24;
@@ -253,7 +253,7 @@ void GameScreen::shopOnScreen(u16 keys) {
                 shootFast = false;
             }
             engine->updateSpritesInScene();
-            points = points - 20;
+            points = points - 15;
         }
     }
     if(keys & KEY_START && !clicked_START) {
