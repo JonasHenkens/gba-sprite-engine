@@ -62,7 +62,7 @@ void GameScreen::died() {
 
 void GameScreen::tick(u16 keys) {
     if(isShopOpened){
-        shopOnScreen(keys);
+        tickShop(keys);
         clicked_A = keys & KEY_A;
         clicked_B = keys & KEY_B;
         clicked_START = keys & KEY_START;
@@ -166,7 +166,7 @@ void GameScreen::showShopText() {
     TextStream::instance().setText(std::string("Click START to return"), 13, 1);
 }
 
-void GameScreen::shopOnScreen(u16 keys) {
+void GameScreen::tickShop(u16 keys) {
     int totalBullets = person.getGun()->getBullets() + ammountBullet;
     TextStream::instance().setText(std::string("Points: ") + std::to_string(points), 6, 1);
     TextStream::instance().setText(std::string("Total Ammo: ") + std::to_string(totalBullets), 7, 1);

@@ -77,7 +77,7 @@ public:
     void showGameText();
     void updateGameText();
     void showShopText();
-    void shopOnScreen(u16 keys);
+    void tickShop(u16 keys);
     void quitShop();
     void openShop();
 
