@@ -62,6 +62,8 @@ private:
     std::vector<int> bulletsDeleteQueue;
     std::vector<int> zombiesDeleteQueue;
 
+    bool updateSprites = false;
+
 public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;

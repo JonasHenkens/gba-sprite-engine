@@ -82,6 +82,7 @@ void GameScreen::tick(u16 keys) {
         clicked_A = keys & KEY_A;
         clicked_B = keys & KEY_B;
         clicked_START = keys & KEY_START;
+        engine->updateSpritesInScene();
         return;
     }
 
@@ -127,7 +128,10 @@ void GameScreen::tick(u16 keys) {
     checkCollisions();
     removeExcessSprites();
 
-    engine->updateSpritesInScene();
+    if (updateSprites) {
+        engine->updateSpritesInScene();
+        updateSprites = false;
+    }
 }
 
 void GameScreen::load() {
@@ -252,7 +256,6 @@ void GameScreen::shopOnScreen(u16 keys) {
                 person.setGun(weapon);
                 shootFast = false;
             }
-            engine->updateSpritesInScene();
             points = points - 15;
         }
     }
@@ -357,7 +360,7 @@ void GameScreen::shoot() {
                                         .withData(bulletTiles, sizeof(bulletTiles))
                                         .withVelocity(2, 0)
                                         .buildPtr());
-        engine->updateSpritesInScene();
+        updateSprites = true;
     }
 }
 
@@ -387,7 +390,7 @@ void GameScreen::removeExcessSprites() {
     bulletsToRemove.clear();
     zombiesToRemove.clear();
 
-    engine->updateSpritesInScene();
+    updateSprites = true;
 }
 
 void GameScreen::spawnZombie() {
@@ -405,7 +408,7 @@ void GameScreen::spawnZombie() {
         if (countZombies%5 == 0) {
             zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 112, -1*speed, 0, life, 2)));
         } else {
-            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life)));
+            zombies.push_back(std::shared_ptr<Zombie>(new Zombie(builder, GBA_SCREEN_WIDTH, 128, -1*speed, 0, life, 0)));
         }
 
     }
