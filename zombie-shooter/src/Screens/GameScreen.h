@@ -68,7 +68,6 @@ public:
     void tick(u16 keys) override;
 
     bool canPersonJump();
-    bool zombieCollisions();
     void checkBounds();
     void move();
     void checkCollisions();

@@ -40,5 +40,4 @@ void DeathScreen::load() {
     TextStream::instance().setText(std::string("HIGHSCORE: ") + std::to_string(highscore), 7, 3);
     TextStream::instance().setText(std::string("SCORE: ") + std::to_string(score), 9, 3);
     TextStream::instance().setText(std::string("Press START to try again"), 11, 3);
-
 }

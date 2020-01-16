@@ -32,5 +32,4 @@ void StartScreen::load() {
     backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(startscreenimagePal, sizeof(startscreenimagePal)));
     bg = std::unique_ptr<Background>(new Background(0, startscreenimageTiles, sizeof(startscreenimageTiles), startscreenimageMap, sizeof(startscreenimageMap)));
     bg->useMapScreenBlock(24);
-
 }
