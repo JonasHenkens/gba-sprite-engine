@@ -57,9 +57,9 @@ private:
     std::vector<std::unique_ptr<Sprite>> bulletSprites;
     SpriteBuilder<Sprite> builder;
 
-    std::vector<int> bulletsToRemove;
+    //std::vector<int> bulletsToRemove;
     std::vector<int> zombiesToRemove;
-    std::vector<int> bulletsDeleteQueue;
+    //std::vector<int> bulletsDeleteQueue;
     std::vector<int> zombiesDeleteQueue;
 
     bool updateSprites = false;

@@ -308,11 +308,6 @@ void GameScreen::checkCollisions() {
             continue;
         }
         for (int j = 0; j < bulletSprites.size(); ++j) {
-            if (bulletSprites[j]->isOffScreen()) {
-                bulletSprites[j]->setVelocity(0,0);
-                continue;
-            }
-
             if (zombies[i]->sprite->collidesWith(*bulletSprites[j])){
                 bool headshot = false;
                 int damageGun = person.getGun()->getDamage();
@@ -331,8 +326,7 @@ void GameScreen::checkCollisions() {
                 else{
                     zombies[i].get()->hit(damageGun, headshot);
                 }
-
-                bulletsToRemove.push_back(j);
+                bulletSprites[j]->moveTo(260, 180);
                 break;
             }
         }
@@ -373,12 +367,6 @@ void GameScreen::removeExcessSprites() {
     for (int i = zombiesDeleteQueue.size() - 1; i >= 0; --i) {
         zombies.erase(zombies.begin() + zombiesDeleteQueue[i]);
     }
-    for (int j = bulletsDeleteQueue.size()-1; j >= 0; --j) {
-        if (bulletSprites[j]->isOffScreen()) {
-            bulletSprites.erase(bulletSprites.begin() + j);
-        }
-    }
-    bulletsDeleteQueue.clear();
     zombiesDeleteQueue.clear();
 
     for (int i = 0; i < zombiesToRemove.size(); ++i) {
@@ -386,12 +374,17 @@ void GameScreen::removeExcessSprites() {
         zombies[zombiesToRemove[i]]->deleted = true;
         zombiesDeleteQueue.push_back(zombiesToRemove[i]);
     }
-    for (int i = 0; i < bulletsToRemove.size(); ++i) {
-        bulletSprites[bulletsToRemove[i]]->moveTo(300, 300);
-        bulletsDeleteQueue.push_back(bulletsToRemove[i]);
-    }
-    bulletsToRemove.clear();
     zombiesToRemove.clear();
+
+    for (int i = bulletSprites.size()-1; i >= 0 ; --i) {
+        if (bulletSprites[i]->isOffScreen() && bulletSprites[i]->getDy() == 0 && bulletSprites[i]->getDx() == 0) {
+            bulletSprites.erase(bulletSprites.begin() + i);
+        }
+        if (bulletSprites[i]->isOffScreen()) {
+            bulletSprites[i]->setVelocity(0, 0);
+        }
+    }
+
 
     updateSprites = true;
 }
