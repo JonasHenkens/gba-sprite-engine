@@ -9,11 +9,11 @@
 
 Zombie::Zombie(SpriteBuilder<Sprite> builder, int x, int y, int dx, int dy, int lifePoints) {
     life = lifePoints;
-    if(life < 5){
+    if(life <= 6){
         setBuilder(builder, x, y);
     }
     else{
-        setSprite(builder, x, y);
+        setBuilder2(builder, x, y);
     }
     setVelocity(dx, dy);
 }
@@ -32,7 +32,7 @@ void Zombie::setBuilder(SpriteBuilder<Sprite> builder, int x, int y) {
             .buildPtr();
 }
 
-void Zombie::setSprite(SpriteBuilder<Sprite> builder, int x, int y) {
+void Zombie::setBuilder2(SpriteBuilder<Sprite> builder, int x, int y) {
     sprite = builder
             .withSize(SIZE_16_32)
             .withLocation(x, y)

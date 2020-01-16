@@ -13,7 +13,7 @@ private:
     int life;
     int speedMultiplier = 1;
     void setBuilder(SpriteBuilder<Sprite> builder, int x, int y);
-    void setSprite(SpriteBuilder<Sprite> builder, int x, int y);
+    void setBuilder2(SpriteBuilder<Sprite> builder, int x, int y);
 public:
     bool deleted = false;
     std::unique_ptr<Sprite> sprite;
